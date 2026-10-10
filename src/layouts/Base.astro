@@ -28,7 +28,7 @@ const {
 } = Astro.props;
 
 const fullTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.title}`;
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const canonical = new URL(Astro.url.pathname.replace(/\/?$/, '/'), Astro.site).href;
 const ogImage = new URL(url(image), Astro.site).href;
 
 const personLd = {
