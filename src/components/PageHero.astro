@@ -1,0 +1,46 @@
+---
+interface Props {
+  title: string;
+  lede?: string;
+  crumb?: { href: string; label: string };
+}
+const { title, lede, crumb } = Astro.props;
+---
+<header class="page-hero">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="container">
+    {crumb && (
+      <nav aria-label="Breadcrumb" class="crumb">
+        <a href={crumb.href}>{crumb.label}</a>
+      </nav>
+    )}
+    <h1>{title}</h1>
+    {lede && <p class="lede">{lede}</p>}
+    <slot />
+  </div>
+</header>
+
+<style>
+  .glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(70vmax 40vmax at 100% -10%, rgb(154 106 58 / 0.24), transparent 60%),
+      radial-gradient(40vmax 30vmax at 0% 120%, rgb(214 178 110 / 0.08), transparent 70%);
+  }
+  .container { position: relative; }
+  .crumb { margin-bottom: 1.5rem; }
+  .crumb a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    color: var(--ivory-dim);
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .crumb a::before { content: '‹'; color: var(--gold); font-size: 1.3rem; line-height: 1; }
+  .crumb a:hover { color: var(--gold-bright); }
+  h1 { max-width: 16ch; }
+</style>

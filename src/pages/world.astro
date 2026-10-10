@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Gallery from '../components/Gallery.astro';
+import { publishedGallery } from '../data/gallery';
+---
+<Base title="My World" description="Photographs from Kalla Dhanush's world — motorcycles, travel, portraits and creative work.">
+  <PageHero
+    title="My World"
+    lede="Motorcycles, hills at first light, portraits and creative experiments. Filter by theme and open any frame to view it full size."
+  />
+  <section class="chapter" aria-label="Photo gallery">
+    <div class="container">
+      <Gallery items={publishedGallery} />
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,99 @@
+---
+import type { Project } from '../data/projects';
+interface Props { project: Project; headingLevel?: 'h2' | 'h3' }
+const { project: p, headingLevel = 'h3' } = Astro.props;
+const H = headingLevel;
+---
+<article class="project-card" data-category={p.category} data-tilt>
+  <a class="cover" href={`/projects/${p.slug}/`} tabindex="-1" aria-hidden="true">
+    <span class="mark">{p.mark}</span>
+    <span class="orbit" aria-hidden="true"></span>
+  </a>
+  <div class="body">
+    <p class="meta">
+      <span>{p.category}</span>
+      <span class="status" data-status={p.status}>{p.status}</span>
+    </p>
+    <H class="title"><a href={`/projects/${p.slug}/`}>{p.title}</a></H>
+    <p class="subtitle">{p.subtitle}</p>
+    <p class="summary">{p.summary}</p>
+    {p.technologies && (
+      <ul class="chips" aria-label="Key technologies">
+        {p.technologies.slice(0, 4).map((t) => <li class="tag">{t}</li>)}
+      </ul>
+    )}
+    {!p.published && <p class="draft">Draft — not published</p>}
+  </div>
+</article>
+
+<style>
+  .project-card {
+    --rx: 0deg; --ry: 0deg;
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    background: linear-gradient(180deg, var(--charcoal-2), var(--charcoal));
+    overflow: hidden;
+    transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
+    transition: transform 0.5s var(--ease-out), border-color 0.4s;
+  }
+  .project-card:hover, .project-card:focus-within { border-color: var(--line-strong); }
+  .project-card[hidden] { display: none; }
+  .cover {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 9;
+    text-decoration: none;
+    overflow: hidden;
+    background:
+      radial-gradient(60% 80% at 30% 20%, rgb(214 178 110 / 0.22), transparent 70%),
+      radial-gradient(50% 70% at 90% 100%, rgb(226 129 60 / 0.14), transparent 70%),
+      #0a0806;
+    border-bottom: 1px solid var(--line);
+  }
+  .mark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(4rem, 3rem + 4vw, 6.5rem);
+    line-height: 1;
+    font-variation-settings: 'opsz' 96;
+    background: var(--metal);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transition: transform 0.8s var(--ease-out), letter-spacing 0.8s var(--ease-out);
+  }
+  .orbit {
+    position: absolute;
+    width: 78%;
+    aspect-ratio: 3 / 1;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    transform: rotate(-12deg);
+    transition: transform 1.2s var(--ease-out);
+  }
+  .project-card:hover .mark { transform: scale(1.06); }
+  .project-card:hover .orbit { transform: rotate(-4deg) scale(1.08); }
+  .body { padding: 1.5rem 1.5rem 1.75rem; display: flex; flex-direction: column; }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin: 0 0 1rem;
+    font-size: 0.85rem;
+    color: var(--ivory-dim);
+  }
+  .title { font-size: var(--step-3); }
+  .title a { text-decoration: none; }
+  .title a::after { content: ''; position: absolute; inset: 0; }
+  .title a:focus-visible { outline: none; }
+  .project-card:has(.title a:focus-visible) { outline: 2px solid var(--ember); outline-offset: 3px; }
+  .subtitle { margin: 0.35rem 0 1rem; font-family: var(--font-display); font-style: italic; color: var(--gold); font-size: 1.1rem; }
+  .summary { color: var(--ivory-dim); font-size: 0.98rem; }
+  .chips { list-style: none; margin: auto 0 0; padding: 1.25rem 0 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .draft { margin-top: 1rem; color: var(--ember); font-size: 0.85rem; }
+</style>

@@ -1,0 +1,160 @@
+---
+import { site } from '../data/site';
+---
+<div class="intro" data-intro-overlay role="region" aria-label="Welcome">
+  <button class="skip" type="button" data-intro-skip>Skip intro</button>
+
+  <div class="loader" data-intro-loader aria-live="polite">
+    <svg class="loader-ring" viewBox="0 0 120 120" aria-hidden="true">
+      <circle cx="60" cy="60" r="54" class="track" />
+      <circle cx="60" cy="60" r="54" class="bar" data-intro-bar pathLength="100" />
+    </svg>
+    <span class="loader-mark gold-text" aria-hidden="true">D.</span>
+    <span class="loader-text"><span data-intro-pct>0</span>% — loading the world</span>
+  </div>
+
+  <!-- Shown only if WebGL is unavailable -->
+  <div class="fallback-emblem" aria-hidden="true">
+    <span class="fallback-d gold-text">D.</span>
+    <svg class="fallback-globe" viewBox="0 0 200 200">
+      <defs>
+        <radialGradient id="fg" cx="35%" cy="30%" r="75%">
+          <stop offset="0" stop-color="#4a3820" /><stop offset="0.6" stop-color="#140f09" /><stop offset="1" stop-color="#000" />
+        </radialGradient>
+      </defs>
+      <circle cx="100" cy="100" r="92" fill="url(#fg)" stroke="#d6b26e" stroke-opacity=".55" />
+      <g fill="none" stroke="#d6b26e" stroke-opacity=".28">
+        <ellipse cx="100" cy="100" rx="92" ry="30" /><ellipse cx="100" cy="100" rx="92" ry="62" />
+        <ellipse cx="100" cy="100" rx="30" ry="92" /><ellipse cx="100" cy="100" rx="62" ry="92" />
+        <line x1="8" y1="100" x2="192" y2="100" /><line x1="100" y1="8" x2="100" y2="192" />
+      </g>
+    </svg>
+  </div>
+
+  <div class="intro-copy" data-intro-copy>
+    <p class="intro-name">{site.nameUpper}</p>
+    <p class="intro-tagline">{site.tagline}</p>
+    <button class="btn btn-gold start" type="button" data-intro-start>
+      <span>Start</span><span class="sep" aria-hidden="true"></span><span>Enter my world</span>
+    </button>
+    <p class="intro-hint">Drag to turn the Earth. Press Esc to skip.</p>
+  </div>
+</div>
+
+<style>
+  .intro {
+    position: fixed;
+    inset: 0;
+    z-index: 110;
+    display: none;
+    touch-action: pan-y;
+    cursor: grab;
+  }
+  .intro:global(.is-dragging) { cursor: grabbing; }
+  :global(html.intro-pending) .intro { display: block; }
+  :global(html.intro-pending) { overflow: hidden; }
+  :global(html.intro-leaving) .intro { pointer-events: none; }
+
+  .skip {
+    position: absolute;
+    top: max(1.1rem, env(safe-area-inset-top));
+    right: var(--gutter);
+    min-height: 44px;
+    padding: 0 1.1rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgb(0 0 0 / 0.4);
+    color: var(--ivory-dim);
+    font: 600 0.7rem/1 var(--font-sans);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    z-index: 2;
+    transition: color 0.3s, border-color 0.3s, opacity 0.5s;
+  }
+  .skip:hover { color: var(--ivory); border-color: var(--gold); }
+
+  .loader {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 1.25rem;
+    transition: opacity 0.6s;
+  }
+  .loader-ring { width: 120px; height: 120px; grid-area: 1 / 1; transform: rotate(-90deg); }
+  .loader-ring circle { fill: none; stroke-width: 1.2; }
+  .loader-ring .track { stroke: var(--line); }
+  .loader-ring .bar { stroke: var(--gold); stroke-dasharray: 100; stroke-dashoffset: calc(100 - var(--pct, 0)); transition: stroke-dashoffset 0.4s var(--ease-out); stroke-linecap: round; }
+  .loader-mark {
+    grid-area: 1 / 1;
+    align-self: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 2.6rem;
+    font-variation-settings: 'opsz' 96;
+    line-height: 1;
+  }
+  .loader-text { font-size: 0.8rem; letter-spacing: 0.08em; color: var(--ivory-faint); }
+  :global(.intro-ready) .loader { opacity: 0; pointer-events: none; }
+
+  .intro-copy {
+    position: absolute;
+    left: 50%;
+    bottom: max(7vh, 2.5rem);
+    transform: translateX(-50%);
+    width: min(92vw, 40rem);
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    gap: 0.9rem;
+    opacity: 0;
+    transition: opacity 1.2s var(--ease-out), transform 1.2s var(--ease-out);
+  }
+  :global(.intro-ready) .intro-copy { opacity: 1; }
+  :global(html.intro-leaving) .intro-copy { opacity: 0; transform: translate(-50%, 24px); transition-duration: 0.6s; }
+  :global(html.intro-leaving) .skip { opacity: 0; }
+
+  .intro-name {
+    margin: 0;
+    font-size: clamp(0.85rem, 0.7rem + 0.6vw, 1.1rem);
+    font-weight: 600;
+    letter-spacing: 0.55em;
+    padding-left: 0.55em;
+    color: var(--ivory);
+  }
+  .intro-tagline {
+    margin: 0 0 0.6rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.4rem, 1rem + 1.8vw, 2.3rem);
+    color: var(--gold-bright);
+  }
+  .start { min-height: 56px; padding-inline: 2rem; }
+  .start .sep { width: 1px; height: 14px; background: rgb(0 0 0 / 0.35); }
+  .intro-hint { margin: 0.35rem 0 0; font-size: 0.78rem; color: var(--ivory-faint); }
+
+  .fallback-emblem { display: none; }
+  :global(html.no-webgl) .fallback-emblem {
+    position: absolute;
+    inset: 0 0 30vh 0;
+    display: grid;
+    place-items: center;
+  }
+  .fallback-d {
+    grid-area: 1 / 1;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: min(42vh, 70vw);
+    line-height: 0.8;
+    font-variation-settings: 'opsz' 96;
+    filter: drop-shadow(0 0 40px rgb(214 178 110 / 0.35));
+  }
+  .fallback-globe { grid-area: 1 / 1; width: min(20vh, 32vw); margin-right: min(4vh, 7vw); opacity: 0.95; }
+
+  @media (max-width: 600px) {
+    .start { padding-inline: 1.4rem; letter-spacing: 0.14em; }
+    .intro-name { letter-spacing: 0.4em; }
+  }
+</style>

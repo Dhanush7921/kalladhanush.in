@@ -1,0 +1,80 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../data/site';
+import { horizons, visionStatement } from '../data/vision';
+---
+<Base title="Vision & roadmap" description="Where Kalla Dhanush is heading: current work, next goals and long-term ambitions — clearly separated from achievements.">
+  <PageHero title="Vision & roadmap" lede={visionStatement} />
+
+  <section class="chapter" aria-label="Roadmap">
+    <div class="container">
+      <p class="disclaimer panel">
+        <strong>Read this as a plan.</strong> Items marked <em>In progress</em> are happening now. <em>Goal</em> and
+        <em>Aspiration</em> items are intentions, not completed achievements.
+      </p>
+
+      <ol class="road">
+        {horizons.map((h) => (
+          <li class="stage" data-kind={h.kind}>
+            <div class="stage-head">
+              <span class="pill">{h.kind}</span>
+              <h2>{h.name}</h2>
+            </div>
+            <ul class="items">
+              {h.items.map((it) => (
+                <li>
+                  <h3>{it.title}</h3>
+                  <p>{it.body}</p>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+
+      <div class="philosophy">
+        {site.philosophy.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .disclaimer { padding: 1.1rem 1.4rem; margin: 0 0 3rem; max-width: 52rem; color: var(--ivory-dim); }
+  .disclaimer strong { color: var(--ivory); }
+  .disclaimer em { color: var(--gold); font-style: normal; }
+  .road { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; position: relative; }
+  .stage {
+    display: grid;
+    gap: 1.5rem;
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--line);
+  }
+  @media (min-width: 900px) { .stage { grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr); } }
+  .stage-head h2 { font-size: var(--step-5); font-variation-settings: 'opsz' 96; margin-top: 0.75rem; }
+  .pill {
+    display: inline-flex;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-size: 0.82rem;
+  }
+  .stage[data-kind='In progress'] .pill { border-color: var(--ember); color: var(--ember); }
+  .stage[data-kind='Aspiration'] .pill { border-style: dashed; }
+  .items { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.5rem; }
+  .items h3 { font-size: var(--step-2); margin-bottom: 0.4rem; }
+  .items p { color: var(--ivory-dim); }
+  .philosophy {
+    margin-top: 3rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--line);
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    line-height: 1.1;
+  }
+  .philosophy p { margin: 0; }
+  .philosophy p:nth-child(2) { color: var(--ivory-dim); }
+  .philosophy p:nth-child(3) { color: var(--gold); font-style: italic; }
+</style>

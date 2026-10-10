@@ -1,0 +1,33 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('journal', ({ data }) => data.published);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+interface Props { post: CollectionEntry<'journal'> }
+const { post } = Astro.props;
+const { Content } = await render(post);
+const fmt = new Intl.DateTimeFormat('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Base title={post.data.title} description={post.data.summary}>
+  <PageHero title={post.data.title} crumb={{ href: '/journal/', label: "Creator's Journal" }}>
+    <p class="date"><time datetime={post.data.date.toISOString()}>{fmt.format(post.data.date)}</time></p>
+  </PageHero>
+  <article class="chapter">
+    <div class="container prose">
+      <Content />
+    </div>
+  </article>
+</Base>
+
+<style>
+  .date { color: var(--gold); margin-top: 1.5rem; }
+  .prose { max-width: 68ch; font-size: 1.12rem; line-height: 1.8; color: var(--ivory-dim); }
+  .prose :global(h2) { font-size: var(--step-3); margin: 2.5rem 0 1rem; color: var(--ivory); }
+  .prose :global(img) { border-radius: 6px; margin: 2rem 0; }
+  .prose :global(a) { color: var(--gold-bright); }
+</style>

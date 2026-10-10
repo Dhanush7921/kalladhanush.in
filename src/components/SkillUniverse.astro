@@ -1,0 +1,146 @@
+---
+import { skillGroups } from '../data/skills';
+import { publishedProjects } from '../data/projects';
+interface Props { showDashboard?: boolean; idPrefix?: string }
+const { showDashboard = true, idPrefix = 'skills' } = Astro.props;
+const words = skillGroups.flatMap((g) => g.skills.map((s) => ({ s, g: g.id })));
+const projectTitle = (slug: string) => publishedProjects.find((p) => p.slug === slug)?.title;
+---
+<div class="universe" data-skill-universe>
+  <div class="sphere-wrap">
+    <div class="sphere" data-sphere aria-hidden="true">
+      <span class="core" aria-hidden="true"></span>
+      {words.map((w) => <span class="word" data-group={w.g}>{w.s}</span>)}
+    </div>
+    <p class="hint" aria-hidden="true">Drag to spin. Choose a discipline to light it up.</p>
+  </div>
+
+  {showDashboard && (
+    <div class="dashboard">
+      <div class="tabs" role="tablist" aria-label="Skill disciplines">
+        {skillGroups.map((g, i) => (
+          <button
+            type="button"
+            role="tab"
+            id={`${idPrefix}-tab-${g.id}`}
+            aria-controls={`${idPrefix}-panel-${g.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            tabindex={i === 0 ? 0 : -1}
+            data-group-tab={g.id}
+          >{g.name}</button>
+        ))}
+      </div>
+      {skillGroups.map((g, i) => (
+        <section
+          class="group-panel"
+          role="tabpanel"
+          id={`${idPrefix}-panel-${g.id}`}
+          aria-labelledby={`${idPrefix}-tab-${g.id}`}
+          hidden={i !== 0}
+          data-group-panel={g.id}
+          tabindex="0"
+        >
+          <h3>{g.name}</h3>
+          <p class="intro">{g.intro}</p>
+          <ul class="skill-list">{g.skills.map((s) => <li class="tag">{s}</li>)}</ul>
+          <p class="evidence"><span>Where it shows:</span> {g.evidence}</p>
+          {g.projects.filter(projectTitle).length > 0 && (
+            <p class="links">
+              {g.projects.filter(projectTitle).map((slug) => (
+                <a class="text-link" href={`/projects/${slug}/`}>{projectTitle(slug)}</a>
+              ))}
+            </p>
+          )}
+        </section>
+      ))}
+    </div>
+  )}
+</div>
+
+<style>
+  .universe {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+  @media (min-width: 980px) { .universe { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+  .sphere-wrap { display: grid; justify-items: center; gap: 1rem; overflow-x: clip; min-width: 0; }
+  .sphere {
+    position: relative;
+    width: min(100%, 520px);
+    aspect-ratio: 1;
+    touch-action: pan-y;
+    cursor: grab;
+    user-select: none;
+  }
+  .sphere:active { cursor: grabbing; }
+  .core {
+    position: absolute;
+    inset: 30%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, rgb(241 220 166 / 0.25), rgb(154 106 58 / 0.08) 45%, transparent 70%);
+    box-shadow: 0 0 120px rgb(214 178 110 / 0.18);
+  }
+  .core::after {
+    content: '';
+    position: absolute;
+    inset: -40%;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    transform: rotateX(72deg);
+  }
+  .word {
+    position: absolute;
+    left: 50%; top: 50%;
+    white-space: nowrap;
+    font-size: clamp(0.78rem, 0.6rem + 0.6vw, 0.95rem);
+    color: var(--ivory);
+    will-change: transform, opacity;
+    transition: color 0.4s;
+    cursor: pointer;
+  }
+  .word.is-active { color: var(--gold-bright); text-shadow: 0 0 18px rgb(214 178 110 / 0.65); }
+  .word.is-dim { color: var(--ivory-faint); }
+  .hint { margin: 0; font-size: 0.82rem; color: var(--ivory-faint); text-align: center; }
+  :global(html:not(.js)) .word { position: static; display: inline-block; margin: 0.3rem; }
+  :global(html:not(.js)) .sphere { aspect-ratio: auto; }
+
+  .dashboard {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    background: linear-gradient(180deg, rgb(28 25 20 / 0.75), rgb(19 17 14 / 0.7));
+    overflow: hidden;
+  }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding: 0.9rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .tabs button {
+    min-height: 40px;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--ivory-dim);
+    font: 500 0.88rem/1.2 var(--font-sans);
+    cursor: pointer;
+  }
+  .tabs button:hover { color: var(--ivory); border-color: var(--line); }
+  .tabs button[aria-selected='true'] { color: #120d06; background: var(--metal); }
+  .group-panel { padding: 1.5rem 1.5rem 1.75rem; }
+  .group-panel h3 { font-size: var(--step-3); }
+  .intro { color: var(--ivory-dim); margin: 0.75rem 0 1.25rem; }
+  .skill-list { list-style: none; margin: 0 0 1.25rem; padding: 0; display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .skill-list .tag { color: var(--ivory); font-size: 0.9rem; }
+  .evidence { font-size: 0.92rem; color: var(--ivory-dim); }
+  .evidence span { color: var(--gold); }
+  .links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; margin-top: 0.75rem; }
+</style>
+
+<script>
+  import { initSkillUniverse } from '../scripts/skills';
+  document.querySelectorAll<HTMLElement>('[data-skill-universe]').forEach(initSkillUniverse);
+</script>

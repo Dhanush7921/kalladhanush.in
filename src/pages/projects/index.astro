@@ -1,0 +1,94 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { publishedProjects, projectCategories } from '../../data/projects';
+const statuses = [...new Set(publishedProjects.map((p) => p.status))];
+---
+<Base title="Projects" description="Project showcase of Kalla Dhanush: Spendly, ROUTE+ and this 3D portfolio website.">
+  <PageHero
+    title="Project showcase"
+    lede="Products I've defined, designed and built. Each one has its own page with the problem, the solution, my role and the verified technology behind it."
+  />
+
+  <section class="chapter" aria-label="Projects">
+    <div class="container">
+      <div class="filters" data-project-filters>
+        <div role="group" aria-label="Filter by type" class="row">
+          <button type="button" aria-pressed="true" data-filter-type="category" data-value="all">All work</button>
+          {projectCategories.map((c) => <button type="button" aria-pressed="false" data-filter-type="category" data-value={c}>{c}</button>)}
+        </div>
+        <div role="group" aria-label="Filter by status" class="row">
+          <button type="button" aria-pressed="true" data-filter-type="status" data-value="all">Any status</button>
+          {statuses.map((s) => <button type="button" aria-pressed="false" data-filter-type="status" data-value={s}>{s}</button>)}
+        </div>
+        <p class="count" aria-live="polite" data-project-count>{publishedProjects.length} projects</p>
+      </div>
+
+      <div class="cards" data-project-grid>
+        {publishedProjects.map((p) => (
+          <div class="cell" data-category={p.category} data-status={p.status}>
+            <ProjectCard project={p} headingLevel="h2" />
+          </div>
+        ))}
+      </div>
+      <p class="empty" data-project-empty hidden>No projects match both filters. Choose “All work” or “Any status” to widen the view.</p>
+
+      <aside class="pending panel">
+        <h2>More work on the way</h2>
+        <p>
+          Company and client projects will appear here once they are approved for public release.
+        </p>
+        <a class="text-link" href="/contact/">Ask about them</a>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .filters { display: grid; gap: 0.75rem; margin-bottom: 2rem; }
+  .row { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .filters button {
+    min-height: 42px;
+    padding: 0.45rem 1.05rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ivory-dim);
+    font: 500 0.9rem/1 var(--font-sans);
+    cursor: pointer;
+  }
+  .filters button:hover { color: var(--ivory); border-color: var(--line-strong); }
+  .filters button[aria-pressed='true'] { background: var(--metal); color: #120d06; border-color: transparent; }
+  .count { margin: 0.25rem 0 0; font-size: 0.85rem; color: var(--ivory-faint); }
+  .cards { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); }
+  .cell[hidden] { display: none; }
+  .cell > :global(*) { height: 100%; }
+  .empty { margin-top: 1.5rem; color: var(--ivory-dim); }
+  .pending { margin-top: 3rem; padding: 1.75rem; max-width: 46rem; }
+  .pending h2 { font-size: var(--step-2); margin-bottom: 0.75rem; }
+  .pending p { color: var(--ivory-dim); }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-project-filters]');
+  const cells = [...document.querySelectorAll<HTMLElement>('[data-project-grid] .cell')];
+  const count = document.querySelector<HTMLElement>('[data-project-count]');
+  const empty = document.querySelector<HTMLElement>('[data-project-empty]');
+  const state: Record<string, string> = { category: 'all', status: 'all' };
+  root?.querySelectorAll<HTMLButtonElement>('button').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const type = btn.dataset.filterType!;
+      state[type] = btn.dataset.value!;
+      root.querySelectorAll<HTMLButtonElement>(`button[data-filter-type="${type}"]`).forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      let shown = 0;
+      cells.forEach((c) => {
+        const ok = (state.category === 'all' || c.dataset.category === state.category) && (state.status === 'all' || c.dataset.status === state.status);
+        c.hidden = !ok;
+        if (ok) shown++;
+      });
+      if (count) count.textContent = `${shown} project${shown === 1 ? '' : 's'}`;
+      if (empty) empty.hidden = shown > 0;
+    });
+  });
+</script>

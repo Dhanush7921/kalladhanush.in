@@ -1,0 +1,88 @@
+---
+import { Picture } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { publishedAchievements } from '../data/achievements';
+---
+<Base title="Achievements" description="Verified certificates and achievements of Kalla Dhanush.">
+  <PageHero
+    title="Achievements"
+    lede="Certificates and recognitions, shown only once each one has been verified against the original."
+  />
+
+  <section class="chapter" aria-label="Certificates">
+    <div class="container">
+      {publishedAchievements.length > 0 ? (
+        <ul class="certs">
+          {publishedAchievements.map((a) => (
+            <li class="cert">
+              {a.image && (
+                <Picture src={a.image} alt={`Certificate: ${a.title}`} widths={[480, 800]} sizes="(min-width: 900px) 40vw, 92vw" formats={['avif', 'webp']} />
+              )}
+              <div class="cert-body">
+                <h2>{a.title}</h2>
+                <p class="issuer">{a.issuer}{a.date && <> — {a.date}</>}</p>
+                {a.description && <p>{a.description}</p>}
+                {a.verifyUrl && <a class="text-link" href={a.verifyUrl} target="_blank" rel="noopener">Verify with the issuer</a>}
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div class="empty panel">
+          <div class="seal" aria-hidden="true"><span>D.</span></div>
+          <div>
+            <h2>Certificates are being verified</h2>
+            <p>
+              Rather than list anything unconfirmed, this gallery stays closed until each certificate has been checked.
+              In the meantime, the journey shows verified education results and experience.
+            </p>
+            <div class="actions">
+              <a class="btn btn-gold" href="/journey/">View the journey</a>
+              <a class="btn" href="/contact/">Request certificates</a>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .certs { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); }
+  .cert { border: 1px solid var(--line); border-radius: var(--radius-m); overflow: hidden; background: var(--charcoal); }
+  .cert :global(img) { width: 100%; }
+  .cert-body { padding: 1.5rem; }
+  .cert h2 { font-size: var(--step-2); }
+  .issuer { color: var(--gold); margin: 0.4rem 0 0.8rem; }
+  .empty {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+    padding: clamp(1.5rem, 5vw, 3rem);
+    max-width: 58rem;
+  }
+  @media (min-width: 720px) { .empty { grid-template-columns: auto 1fr; } }
+  .seal {
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line-strong);
+    box-shadow: inset 0 0 0 10px rgb(0 0 0 / 0.6), inset 0 0 0 11px var(--line), 0 0 60px -10px rgb(214 178 110 / 0.35);
+    background: radial-gradient(circle at 35% 30%, #2b2116, #0a0806 70%);
+  }
+  .seal span {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 3.4rem;
+    font-variation-settings: 'opsz' 96;
+    background: var(--metal);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .empty h2 { font-size: var(--step-3); margin-bottom: 1rem; }
+  .empty p { color: var(--ivory-dim); max-width: 52ch; }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+</style>
