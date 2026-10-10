@@ -135,7 +135,7 @@ export const projects: Project[] = [
       'WebGL fallback, reduced-motion support and keyboard navigation',
       'Content publication flags that keep unapproved work out of the live site',
     ],
-    statusNote: 'Live at kalladhanush.in and deployed automatically from GitHub.',
+    statusNote: 'Live, and deployed automatically from GitHub with GitHub Actions and GitHub Pages.',
     link: { href: 'https://github.com/Dhanush7921/kalladhanush.in', label: 'View source on GitHub' },
   },
 

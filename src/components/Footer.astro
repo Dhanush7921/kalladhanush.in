@@ -1,4 +1,5 @@
 ---
+import { url } from '../lib/url';
 import { site, nav, contact, whatsappLink } from '../data/site';
 const year = new Date().getFullYear();
 ---
@@ -8,7 +9,7 @@ const year = new Date().getFullYear();
       <p class="philosophy">
         {site.philosophy.map((line) => <span>{line}</span>)}
       </p>
-      <a class="btn btn-gold" href="/contact/">Start a conversation</a>
+      <a class="btn btn-gold" href={url('/contact/')}>Start a conversation</a>
     </div>
 
     <div class="grid">
@@ -20,8 +21,8 @@ const year = new Date().getFullYear();
       </div>
       <nav aria-label="Footer">
         <ul class="links">
-          <li><a href="/">Home</a></li>
-          {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+          <li><a href={url('/')}>Home</a></li>
+          {nav.map((n) => <li><a href={url(n.href)}>{n.label}</a></li>)}
         </ul>
       </nav>
       <ul class="links contact">

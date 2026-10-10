@@ -1,11 +1,12 @@
 ---
+import { url } from '../lib/url';
 import type { Project } from '../data/projects';
 interface Props { project: Project; headingLevel?: 'h2' | 'h3' }
 const { project: p, headingLevel = 'h3' } = Astro.props;
 const H = headingLevel;
 ---
 <article class="project-card" data-category={p.category} data-tilt>
-  <a class="cover" href={`/projects/${p.slug}/`} tabindex="-1" aria-hidden="true">
+  <a class="cover" href={url(`/projects/${p.slug}/`)} tabindex="-1" aria-hidden="true">
     <span class="mark">{p.mark}</span>
     <span class="orbit" aria-hidden="true"></span>
   </a>
@@ -14,7 +15,7 @@ const H = headingLevel;
       <span>{p.category}</span>
       <span class="status" data-status={p.status}>{p.status}</span>
     </p>
-    <H class="title"><a href={`/projects/${p.slug}/`}>{p.title}</a></H>
+    <H class="title"><a href={url(`/projects/${p.slug}/`)}>{p.title}</a></H>
     <p class="subtitle">{p.subtitle}</p>
     <p class="summary">{p.summary}</p>
     {p.technologies && (

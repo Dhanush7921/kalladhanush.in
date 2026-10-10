@@ -1,4 +1,5 @@
 ---
+import { url } from '../../lib/url';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
@@ -14,7 +15,7 @@ const { Content } = await render(post);
 const fmt = new Intl.DateTimeFormat('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
 <Base title={post.data.title} description={post.data.summary}>
-  <PageHero title={post.data.title} crumb={{ href: '/journal/', label: "Creator's Journal" }}>
+  <PageHero title={post.data.title} crumb={{ href: url('/journal/'), label: "Creator's Journal" }}>
     <p class="date"><time datetime={post.data.date.toISOString()}>{fmt.format(post.data.date)}</time></p>
   </PageHero>
   <article class="chapter">

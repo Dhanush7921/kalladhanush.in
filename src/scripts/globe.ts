@@ -13,6 +13,7 @@ import {
   ACESFilmicToneMapping, DoubleSide,
 } from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+import { url } from '../lib/url';
 
 export type StageMode = 'intro' | 'hero' | 'contact';
 
@@ -286,9 +287,9 @@ export class GlobeStage {
     const { onProgress } = this.opts;
     let done = 0;
     const tick = () => onProgress?.(++done / 3);
-    const texPromise = new TextureLoader().loadAsync('/earth/earth-data.webp').then((t) => { tick(); return t; });
-    const landPromise = fetchFloats('/earth/land-points.bin').then((d) => { tick(); return d; });
-    const cityPromise = fetchFloats('/earth/cities.bin').then((d) => { tick(); return d; });
+    const texPromise = new TextureLoader().loadAsync(url('/earth/earth-data.webp')).then((t) => { tick(); return t; });
+    const landPromise = fetchFloats(url('/earth/land-points.bin')).then((d) => { tick(); return d; });
+    const cityPromise = fetchFloats(url('/earth/cities.bin')).then((d) => { tick(); return d; });
     const [tex, land, cities] = await Promise.all([texPromise, landPromise, cityPromise]);
     tex.anisotropy = Math.min(4, this.renderer.capabilities.getMaxAnisotropy());
 

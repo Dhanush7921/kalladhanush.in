@@ -1,12 +1,13 @@
 ---
+import { url } from '../lib/url';
 import { site, nav, contact, whatsappLink } from '../data/site';
 const path = Astro.url.pathname;
-const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+const isCurrent = (href: string) => (href === '/' ? path === url('/') : path.startsWith(url(href)));
 const primary = nav.filter((n) => n.primary);
 ---
 <header class="site-header" data-header>
   <div class="bar container">
-    <a class="brand" href="/" aria-label={`${site.name} — home`} data-monogram>
+    <a class="brand" href={url('/')} aria-label={`${site.name} — home`} data-monogram>
       <span class="brand-mark gold-text" aria-hidden="true">D.</span>
       <span class="brand-rule" aria-hidden="true"></span>
       <span class="brand-name">{site.nameUpper}</span>
@@ -16,7 +17,7 @@ const primary = nav.filter((n) => n.primary);
       <ul>
         {primary.map((item) => (
           <li>
-            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+            <a href={url(item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
           </li>
         ))}
       </ul>
@@ -49,9 +50,9 @@ const primary = nav.filter((n) => n.primary);
     </div>
     <nav aria-label="All pages" class="menu-nav">
       <ul>
-        <li><a href="/" aria-current={path === '/' ? 'page' : undefined}>Home</a></li>
+        <li><a href={url('/')} aria-current={isCurrent('/') ? 'page' : undefined}>Home</a></li>
         {nav.map((item) => (
-          <li><a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a></li>
+          <li><a href={url(item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a></li>
         ))}
       </ul>
     </nav>

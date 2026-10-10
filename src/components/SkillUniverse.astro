@@ -1,4 +1,5 @@
 ---
+import { url } from '../lib/url';
 import { skillGroups } from '../data/skills';
 import { publishedProjects } from '../data/projects';
 interface Props { showDashboard?: boolean; idPrefix?: string }
@@ -47,7 +48,7 @@ const projectTitle = (slug: string) => publishedProjects.find((p) => p.slug === 
           {g.projects.filter(projectTitle).length > 0 && (
             <p class="links">
               {g.projects.filter(projectTitle).map((slug) => (
-                <a class="text-link" href={`/projects/${slug}/`}>{projectTitle(slug)}</a>
+                <a class="text-link" href={url(`/projects/${slug}/`)}>{projectTitle(slug)}</a>
               ))}
             </p>
           )}

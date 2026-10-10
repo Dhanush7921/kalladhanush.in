@@ -1,4 +1,5 @@
 ---
+import { url } from '../lib/url';
 import Base from '../layouts/Base.astro';
 import { nav } from '../data/site';
 ---
@@ -9,11 +10,11 @@ import { nav } from '../data/site';
       <h1>This page drifted out of orbit.</h1>
       <p class="lede">The address may have changed or never existed. Head back home, or choose a page below.</p>
       <div class="actions">
-        <a class="btn btn-gold" href="/">Back to home</a>
-        <a class="btn" href="/contact/">Report a broken link</a>
+        <a class="btn btn-gold" href={url('/')}>Back to home</a>
+        <a class="btn" href={url('/contact/')}>Report a broken link</a>
       </div>
       <ul class="links">
-        {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+        {nav.map((n) => <li><a href={url(n.href)}>{n.label}</a></li>)}
       </ul>
     </div>
   </section>

@@ -1,4 +1,5 @@
 ---
+import { url } from '../lib/url';
 import { site, contact, whatsappLink } from '../data/site';
 ---
 <div class="card-scene" data-bizcard>
@@ -24,7 +25,7 @@ import { site, contact, whatsappLink } from '../data/site';
         <li><span>Instagram</span><a href={contact.instagram} target="_blank" rel="noopener">{contact.instagramHandle}</a></li>
         <li><span>Based in</span><span class="v">{site.location.city}, {site.location.country}</span></li>
       </ul>
-      <a class="btn btn-small btn-gold" href="/kalla-dhanush.vcf" download>Save contact</a>
+      <a class="btn btn-small btn-gold" href={url('/kalla-dhanush.vcf')} download>Save contact</a>
     </div>
   </div>
   <button class="flip btn btn-small" type="button" data-card-flip aria-pressed="false">Flip card</button>

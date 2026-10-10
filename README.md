@@ -71,7 +71,15 @@ Company or client work stays `published: false` until public release is approved
 
 Pushing to `main` runs `.github/workflows/deploy.yml`, which installs dependencies, type-checks, builds, checks that no unpublished project slipped into the output, and deploys `dist/` to GitHub Pages.
 
-Repository settings: **Settings → Pages → Source: GitHub Actions**, custom domain `kalladhanush.in`, **Enforce HTTPS** on.
+Repository settings: **Settings → Pages → Source: GitHub Actions**.
+
+**Current address (temporary):** <https://dhanush7921.github.io/kalladhanush.in/> — used while `kalladhanush.in` awaits GoDaddy registrant verification. All internal links and assets go through `src/lib/url.ts`, so the base path is set in one place.
+
+**Switching back to kalladhanush.in** (no rebuild of the site needed):
+
+1. In `astro.config.mjs` set `USE_CUSTOM_DOMAIN = true` (root base path; the build writes `dist/CNAME`), commit and push.
+2. GitHub → Settings → Pages → Custom domain: enter `kalladhanush.in` and save.
+3. Set the DNS records below at GoDaddy, wait for the DNS check to pass, then tick **Enforce HTTPS**.
 
 DNS for `kalladhanush.in` (at the registrar):
 

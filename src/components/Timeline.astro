@@ -1,4 +1,5 @@
 ---
+import { url } from '../lib/url';
 import type { JourneyEntry } from '../data/journey';
 import { publishedProjects } from '../data/projects';
 interface Props { entries: JourneyEntry[]; compact?: boolean }
@@ -21,7 +22,7 @@ const projectExists = (slug?: string) => !!slug && publishedProjects.some((p) =>
           <p>{e.summary}</p>
           <ul>{e.details.map((d) => <li>{d}</li>)}</ul>
           {projectExists(e.projectSlug) && (
-            <a class="text-link" href={`/projects/${e.projectSlug}/`}>Open the project</a>
+            <a class="text-link" href={url(`/projects/${e.projectSlug}/`)}>Open the project</a>
           )}
         </div>
       </details>

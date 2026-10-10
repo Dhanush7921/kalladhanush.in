@@ -1,4 +1,5 @@
 ---
+import { url } from '../lib/url';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import SkillUniverse from '../components/SkillUniverse.astro';
@@ -36,7 +37,7 @@ const title = (slug: string) => publishedProjects.find((p) => p.slug === slug)?.
                   {g.evidence}
                   {g.projects.filter(title).length > 0 && (
                     <span class="proj">
-                      {g.projects.filter(title).map((s) => <a class="text-link" href={`/projects/${s}/`}>{title(s)}</a>)}
+                      {g.projects.filter(title).map((s) => <a class="text-link" href={url(`/projects/${s}/`)}>{title(s)}</a>)}
                     </span>
                   )}
                 </td>

@@ -3,6 +3,7 @@
  * reveals, toast, easter eggs and the optional ambient sound.
  */
 import { AmbientSound } from './sound';
+import { url } from '../lib/url';
 
 const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -59,7 +60,7 @@ function initReplayIntro() {
       if (document.documentElement.dataset.intro === 'enabled' && window.kdIntro) {
         window.kdIntro.replay();
       } else {
-        location.href = '/?intro=1';
+        location.href = url('/?intro=1');
       }
     });
   });

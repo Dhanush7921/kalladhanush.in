@@ -1,8 +1,9 @@
 import type { APIRoute } from 'astro';
 import { site, contact } from '../data/site';
+import { url } from '../lib/url';
 
 /** Static vCard so visitors can save Dhanush's contact in one tap. */
-export const GET: APIRoute = () => {
+export const GET: APIRoute = ({ site: siteUrl }) => {
   const lines = [
     'BEGIN:VCARD',
     'VERSION:3.0',
@@ -12,7 +13,7 @@ export const GET: APIRoute = () => {
     `TITLE:${site.title}`,
     `EMAIL;TYPE=INTERNET:${contact.email}`,
     `TEL;TYPE=CELL:+${contact.whatsappNumber}`,
-    `URL:${site.url}`,
+    `URL:${new URL(url('/'), siteUrl).href}`,
     `ADR;TYPE=HOME:;;;${site.location.city};;;${site.location.country}`,
     `X-SOCIALPROFILE;TYPE=instagram:${contact.instagram}`,
     'END:VCARD',

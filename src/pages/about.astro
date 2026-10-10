@@ -1,4 +1,5 @@
 ---
+import { url } from '../lib/url';
 import { Picture } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
@@ -54,8 +55,8 @@ const interests = ['Motorcycles', 'Travel', 'Photography', 'Videography', 'Fitne
         <p>
           Since September 2026 I've been a Technology &amp; Development Trainee (provisional) at Tierra Automation,
           a Visakhapatnam company working across embedded systems, IoT, web, apps and robotics. Alongside it I build
-          my own products — <a class="text-link" href="/projects/spendly/">Spendly</a>, a personal finance app, and
-          <a class="text-link" href="/projects/route-plus/">ROUTE+</a>, route-aware travel discovery for India.
+          my own products — <a class="text-link" href={url('/projects/spendly/')}>Spendly</a>, a personal finance app, and
+          <a class="text-link" href={url('/projects/route-plus/')}>ROUTE+</a>, route-aware travel discovery for India.
         </p>
         <p>
           Away from the keyboard you'll find me around motorcycles, in the hills, or behind and in front of a camera.
@@ -93,8 +94,8 @@ const interests = ['Motorcycles', 'Travel', 'Photography', 'Videography', 'Fitne
       </div>
       <Gallery items={portraits} filters={false} />
       <div class="next-links">
-        <a class="btn btn-gold" href="/journey/">Follow my journey</a>
-        <a class="btn" href="/world/">See my world</a>
+        <a class="btn btn-gold" href={url('/journey/')}>Follow my journey</a>
+        <a class="btn" href={url('/world/')}>See my world</a>
         <a class="btn" href={`mailto:${contact.email}`}>Email me</a>
       </div>
     </div>

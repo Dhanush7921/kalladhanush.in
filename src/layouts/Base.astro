@@ -1,4 +1,5 @@
 ---
+import { url } from '../lib/url';
 import '@fontsource-variable/bodoni-moda/opsz.css';
 import '@fontsource-variable/bodoni-moda/opsz-italic.css';
 import '@fontsource-variable/instrument-sans/wdth.css';
@@ -28,19 +29,19 @@ const {
 
 const fullTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.title}`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL(image, Astro.site).href;
+const ogImage = new URL(url(image), Astro.site).href;
 
 const personLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: site.name,
   alternateName: site.knownAs,
-  url: site.url,
+  url: new URL(url('/'), Astro.site).href,
   jobTitle: site.roles.join(', '),
   email: `mailto:${contact.email}`,
   address: { '@type': 'PostalAddress', addressLocality: site.location.city, addressCountry: 'IN' },
   sameAs: [contact.instagram, contact.github].filter(Boolean),
-  image: new URL('/og-image.jpg', Astro.site).href,
+  image: ogImage,
 };
 ---
 <!doctype html>
@@ -54,11 +55,11 @@ const personLd = {
     {noindex && <meta name="robots" content="noindex" />}
     <meta name="theme-color" content="#000000" />
     <meta name="color-scheme" content="dark" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
+    <link rel="icon" href={url('/favicon-32.png')} sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href={url('/apple-touch-icon.png')} />
+    <link rel="sitemap" href={url('/sitemap-index.xml')} />
+    <link rel="manifest" href={url('/site.webmanifest')} />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.name} />

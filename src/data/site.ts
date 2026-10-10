@@ -11,6 +11,7 @@ export const site = {
   monogram: 'D.',
   brand: 'D. | KALLA DHANUSH',
   domain: 'kalladhanush.in',
+  /** Primary custom domain (active once registrar verification completes). */
   url: 'https://kalladhanush.in',
   title: 'AI & ML Engineer | Video Editor | Photographer',
   roles: ['AI & ML Engineer', 'Video Editor', 'Photographer'],

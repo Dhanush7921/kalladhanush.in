@@ -1,4 +1,5 @@
 ---
+import { url } from '../lib/url';
 import { Picture } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
@@ -38,8 +39,8 @@ import { publishedAchievements } from '../data/achievements';
               In the meantime, the journey shows verified education results and experience.
             </p>
             <div class="actions">
-              <a class="btn btn-gold" href="/journey/">View the journey</a>
-              <a class="btn" href="/contact/">Request certificates</a>
+              <a class="btn btn-gold" href={url('/journey/')}>View the journey</a>
+              <a class="btn" href={url('/contact/')}>Request certificates</a>
             </div>
           </div>
         </div>
