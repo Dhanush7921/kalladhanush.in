@@ -1,0 +1,37 @@
+# Temporary: proves the production build on a clean runner and records package-lock.json.
+# Lives only on the verify-react-build branch; never merged to main.
+name: verify-react-build
+on:
+  push:
+    branches: [verify-react-build]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install
+        run: npm install --no-audit --no-fund
+      - name: Type-check and build (root domain base "/")
+        run: npm run build
+      - name: Inspect dist
+        run: |
+          test -f dist/index.html
+          grep -oE '(src|href)="[^"]+"' dist/index.html
+          ls dist dist/assets | head -60
+          du -sh dist
+          if grep -rqiE "tierra|industrial asset|ibc portfolio" dist; then echo "Unapproved content found" && exit 1; fi
+      - name: Project-page base build
+        run: BASE_PATH=/kalladhanush.in/ npx vite build --outDir dist-sub && grep -oE 'src="[^"]+"' dist-sub/index.html
+      - name: Commit lockfile
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898499+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          git commit -m "Add package-lock.json from verified build [skip ci]" || echo "lockfile unchanged"
+          git push
