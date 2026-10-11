@@ -1,28 +1,30 @@
 {
   "name": "kalladhanush-portfolio",
-  "type": "module",
-  "version": "1.0.0",
   "private": true,
+  "version": "2.0.0",
+  "description": "Personal portfolio of Kalla Dhanush — Beyond Vision. Into Reality.",
+  "type": "module",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "check": "astro check"
+    "dev": "vite",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.2.1",
-    "@fontsource-variable/bodoni-moda": "^5.1.0",
-    "@fontsource-variable/instrument-sans": "^5.1.0",
-    "astro": "^7.3.8",
-    "three": "^0.170.0"
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "three": "~0.170.0"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.4",
-    "@types/three": "^0.170.0",
-    "typescript": "^5.6.0"
+    "@types/node": "^22.15.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@types/three": "~0.170.0",
+    "@vitejs/plugin-react": "^4.5.0",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
   },
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=20.19.0"
   }
 }
-

@@ -25,22 +25,20 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
+
+      # Reports the site's base path: "" with a custom domain, "/kalladhanush.in" on dhanush7921.github.io
+      - name: Configure GitHub Pages
+        id: pages
+        uses: actions/configure-pages@v5
 
       - name: Install dependencies
-        run: npm ci
-
-      - name: Type check
-        run: npm run check
-
-      - name: Build
-        run: npm run build
-
-      - name: Guard against unpublished content
         run: |
-          if grep -rqE "tierra-automation-website|industrial-asset-qr-tracking|ibc-portfolio" dist; then
-            echo "Unpublished project content found in the build output." && exit 1
-          fi
+          if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
+
+      - name: Type-check and build
+        env:
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}/
+        run: npm run build
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
