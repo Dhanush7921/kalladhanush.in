@@ -1,21 +1,14 @@
-name: toolchain
+name: toolchain-cleanup
 on:
   push:
     branches: [toolchain]
 permissions:
   contents: write
 jobs:
-  pack:
+  cleanup:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - run: npm ci --no-audit --no-fund
-      - run: tar czf toolchain.tgz node_modules
       - env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release delete toolchain-tmp --yes --cleanup-tag || true
-          gh release create toolchain-tmp toolchain.tgz --prerelease --target toolchain --title "temporary build toolchain" --notes "Temporary; deleted after use."
+          GH_REPO: ${{ github.repository }}
+        run: gh release delete toolchain-tmp --yes --cleanup-tag || true
