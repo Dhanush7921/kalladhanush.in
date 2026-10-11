@@ -1,17 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
-import Gallery from '../components/Gallery.astro';
-import { publishedGallery } from '../data/gallery';
+import WorldStage from '../components/WorldStage.astro';
 ---
-<Base title="My World" description="Photographs from Kalla Dhanush's world — motorcycles, travel, portraits and creative work.">
-  <PageHero
-    title="My World"
-    lede="Motorcycles, hills at first light, portraits and creative experiments. Filter by theme and open any frame to view it full size."
-  />
-  <section class="chapter" aria-label="Photo gallery">
-    <div class="container">
-      <Gallery items={publishedGallery} />
-    </div>
-  </section>
+<Base title="My World" description="Explore Dhanush's interests through interactive sculptures: motorcycles, photography, cinematography, fitness, travel and technology.">
+<PageHero title="A different perspective." lede="Beyond the work: the things that move me, shape me and keep me curious."/>
+<section class="chapter"><div class="container"><WorldStage/></div></section>
 </Base>

@@ -31,11 +31,11 @@ const fmt = new Intl.DateTimeFormat('en-IN', { day: 'numeric', month: 'long', ye
         <div class="empty">
           <p class="first">No entries yet.</p>
           <p class="muted">
-            New articles land here as soon as they are published. Until then, the projects and the gallery tell the story.
+            New articles land here as soon as they are published. Until then, the projects tell the story.
           </p>
           <div class="actions">
             <a class="btn btn-gold" href={url('/projects/')}>Read about the projects</a>
-            <a class="btn" href={url('/world/')}>Browse the gallery</a>
+            <a class="btn" href={url('/world/')}>Explore my world</a>
           </div>
         </div>
       )}
@@ -54,3 +54,4 @@ const fmt = new Intl.DateTimeFormat('en-IN', { day: 'numeric', month: 'long', ye
   .first { font-family: var(--font-display); font-style: italic; font-size: var(--step-3); color: var(--gold-bright); margin-bottom: 1rem; }
   .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
 </style>
+

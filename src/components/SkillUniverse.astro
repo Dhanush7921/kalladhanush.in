@@ -4,15 +4,12 @@ import { skillGroups } from '../data/skills';
 import { publishedProjects } from '../data/projects';
 interface Props { showDashboard?: boolean; idPrefix?: string }
 const { showDashboard = true, idPrefix = 'skills' } = Astro.props;
-const words = skillGroups.flatMap((g) => g.skills.map((s) => ({ s, g: g.id })));
+
 const projectTitle = (slug: string) => publishedProjects.find((p) => p.slug === slug)?.title;
 ---
 <div class="universe" data-skill-universe>
   <div class="sphere-wrap">
-    <div class="sphere" data-sphere aria-hidden="true">
-      <span class="core" aria-hidden="true"></span>
-      {words.map((w) => <span class="word" data-group={w.g}>{w.s}</span>)}
-    </div>
+    <div class="sphere exhibit" data-exhibit="skills" aria-label="Interactive skill constellation"><div class="exhibit-fallback" aria-hidden="true">✧</div>{skillGroups.map((g,i) => <button class="skill-node" type="button" data-node={i} style={`left:${50+36*Math.cos(i/skillGroups.length*Math.PI*2)}%;top:${50+36*Math.sin(i/skillGroups.length*Math.PI*2)}%`}>{g.name}</button>)}</div>
     <p class="hint" aria-hidden="true">Drag to spin. Choose a discipline to light it up.</p>
   </div>
 
@@ -27,7 +24,7 @@ const projectTitle = (slug: string) => publishedProjects.find((p) => p.slug === 
             aria-controls={`${idPrefix}-panel-${g.id}`}
             aria-selected={i === 0 ? 'true' : 'false'}
             tabindex={i === 0 ? 0 : -1}
-            data-group-tab={g.id}
+            data-group-tab={g.id} data-skill-select={i}
           >{g.name}</button>
         ))}
       </div>
@@ -38,7 +35,7 @@ const projectTitle = (slug: string) => publishedProjects.find((p) => p.slug === 
           id={`${idPrefix}-panel-${g.id}`}
           aria-labelledby={`${idPrefix}-tab-${g.id}`}
           hidden={i !== 0}
-          data-group-panel={g.id}
+          data-group-panel={g.id} data-skill-panel={i}
           tabindex="0"
         >
           <h3>{g.name}</h3>
@@ -141,7 +138,5 @@ const projectTitle = (slug: string) => publishedProjects.find((p) => p.slug === 
   .links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; margin-top: 0.75rem; }
 </style>
 
-<script>
-  import { initSkillUniverse } from '../scripts/skills';
-  document.querySelectorAll<HTMLElement>('[data-skill-universe]').forEach(initSkillUniverse);
-</script>
+
+

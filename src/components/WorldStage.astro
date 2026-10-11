@@ -1,0 +1,10 @@
+---
+import { interests } from '../data/world';
+---
+<div class="world-theatre" data-world-theatre>
+ <div class="world-list" role="tablist" aria-label="Explore interests">{interests.map((p,i)=><button type="button" role="tab" id={'world-tab-'+i} aria-controls={'world-panel-'+i} aria-selected={i===0?'true':'false'} tabindex={i===0?0:-1} data-world-select={i}><small>{p.symbol}</small>{p.name}<span>↗</span></button>)}</div>
+ <div class="world-visual">
+  <div class="exhibit world-space" data-exhibit="world" aria-label="Interactive symbolic sculpture"><div class="exhibit-fallback" aria-hidden="true">◎</div><span class="scene-caption">OBJECTS OF CURIOSITY · DRAG TO ROTATE</span></div>
+  {interests.map((p,i)=><div id={'world-panel-'+i} role="tabpanel" aria-labelledby={'world-tab-'+i} data-world-panel={i} hidden={i!==0}><h3>{p.title}</h3><p>{p.body}</p></div>)}
+ </div>
+</div>

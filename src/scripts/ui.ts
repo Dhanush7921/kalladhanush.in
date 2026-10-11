@@ -5,7 +5,7 @@
 import { AmbientSound } from './sound';
 import { url } from '../lib/url';
 
-const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('motion-reduced');
 
 let toastTimer = 0;
 export function toast(message: string, ms = 3600) {
@@ -183,3 +183,4 @@ declare global {
     kdSound?: AmbientSound;
   }
 }
+

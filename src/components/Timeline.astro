@@ -8,7 +8,7 @@ const projectExists = (slug?: string) => !!slug && publishedProjects.some((p) =>
 ---
 <ol class:list={['timeline', { compact }]}>
   {entries.map((e, i) => (
-    <li class="entry" data-kind={e.kind}>
+    <li class="entry" data-kind={e.kind} data-reveal>
       <span class="node" aria-hidden="true"><span>{String(i + 1).padStart(2, '0')}</span></span>
       <details class="card" open={!compact && i === entries.length - 1}>
         <summary>
@@ -133,3 +133,4 @@ const projectExists = (slug?: string) => !!slug && publishedProjects.some((p) =>
     .timeline::before { left: 17px; }
   }
 </style>
+

@@ -63,7 +63,7 @@ const primary = nav.filter((n) => n.primary);
         <li><a href={whatsappLink()} target="_blank" rel="noopener">WhatsApp {contact.whatsappDisplay}</a></li>
         <li><a href={contact.instagram} target="_blank" rel="noopener">Instagram</a></li>
       </ul>
-      <button class="btn btn-small" type="button" data-replay-intro>Replay intro</button>
+      <button class="btn btn-small" type="button" data-replay-intro>Replay intro</button><a class="text-link" href={url("/?motion=reduce")}>Reduced motion</a><a class="text-link" href={url("/?render=static")}>Lightweight mode</a><a class="text-link" href={url("/")}>Full experience</a>
     </div>
   </div>
 </dialog>
@@ -252,3 +252,4 @@ const primary = nav.filter((n) => n.primary);
     .menu-btn { padding: 0 0.85rem; }
   }
 </style>
+

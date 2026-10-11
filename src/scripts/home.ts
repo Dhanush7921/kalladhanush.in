@@ -15,7 +15,7 @@ function remember() {
 
 function cleanIntroParam() {
   if (/[?&]intro=1\b/.test(location.search)) {
-    history.replaceState(null, '', location.pathname + location.hash);
+    const params=new URLSearchParams(location.search); params.delete('intro'); history.replaceState(null, '', location.pathname + (params.size ? '?'+params : '') + location.hash);
   }
 }
 
@@ -86,7 +86,15 @@ export function initHome() {
 
   overlay?.querySelector('[data-intro-start]')?.addEventListener('click', start);
   overlay?.querySelector('[data-intro-skip]')?.addEventListener('click', skip);
-  window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && introActive()) skip(); });
+  window.addEventListener('keydown', (e) => {
+    if (!introActive()) return;
+    if (e.key === 'Escape') skip();
+    if (e.key === 'Tab') {
+      const buttons = [...(overlay?.querySelectorAll<HTMLButtonElement>('button') || [])];
+      const i=buttons.indexOf(document.activeElement as HTMLButtonElement);
+      e.preventDefault(); buttons[(i+(e.shiftKey?-1:1)+buttons.length)%buttons.length]?.focus();
+    }
+  });
 
   const fallback = () => {
     root.classList.add('no-webgl');
@@ -126,3 +134,4 @@ export function initHome() {
       fallback();
     });
 }
+

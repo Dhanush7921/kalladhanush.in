@@ -56,10 +56,18 @@ export const skillGroups: SkillGroup[] = [
   },
   {
     id: 'visual',
-    name: 'Photography & video',
+    name: 'Photography',
     intro: 'Telling stories through light, framing and the edit.',
-    skills: ['Photography', 'Portraits', 'Video editing', 'Colour & tone'],
+    skills: ['Photography', 'Composition', 'Colour & tone'],
     evidence: 'See My World.',
+    projects: [],
+  },
+  {
+    id: 'video',
+    name: 'Video editing',
+    intro: 'Visual storytelling through pacing, editing and colour.',
+    skills: ['Video editing', 'Colour & tone', 'Visual storytelling'],
+    evidence: 'Personal creative practice.',
     projects: [],
   },
   {
@@ -73,3 +81,4 @@ export const skillGroups: SkillGroup[] = [
 ];
 
 export const allSkills = skillGroups.flatMap((g) => g.skills.map((s) => ({ skill: s, group: g.id })));
+

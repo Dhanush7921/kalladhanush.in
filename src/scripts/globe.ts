@@ -59,6 +59,7 @@ async function fetchFloats(url: string) {
 }
 
 export function webglAvailable() {
+  if(document.documentElement.dataset.render === 'static') return false;
   try {
     const c = document.createElement('canvas');
     return !!(window.WebGLRenderingContext && (c.getContext('webgl2') || c.getContext('webgl')));
@@ -88,12 +89,13 @@ const earthFrag = /* glsl */ `
     vec3 N = normalize(vN); vec3 V = normalize(vView);
     float ndl = dot(N, uLight);
     float day = smoothstep(-0.25, 0.6, ndl);
-    vec3 ocean = vec3(0.010, 0.009, 0.008) + vec3(0.045, 0.030, 0.016) * day;
-    vec3 landCol = mix(vec3(0.030, 0.022, 0.014), vec3(0.30, 0.205, 0.10), day);
+    vec3 ocean = vec3(0.010, 0.009, 0.008) + vec3(0.012, 0.022, 0.032) * day;
+    vec3 landCol = mix(vec3(0.030, 0.022, 0.014), vec3(0.095, 0.075, 0.045), day);
     vec3 col = mix(ocean, landCol, land);
     col += vec3(0.95, 0.70, 0.36) * coast * (0.10 + 0.45 * day);
     vec3 H = normalize(uLight + V);
     col += vec3(1.0, 0.80, 0.48) * pow(max(dot(N, H), 0.0), 70.0) * (1.0 - land) * 0.55 * day;
+    col *= 0.65;
     float night = 1.0 - smoothstep(-0.1, 0.3, ndl);
     col += vec3(1.0, 0.62, 0.24) * city * night * 1.5;
     float fr = pow(1.0 - max(dot(N, V), 0.0), uRimPow);
@@ -118,7 +120,7 @@ const atmoFrag = /* glsl */ `
     float i = pow(max(0.0, 0.72 - dot(vNV, vec3(0.0, 0.0, 1.0))), 3.2) * uRim;
     float lit = 0.3 + 0.7 * smoothstep(-0.6, 0.5, dot(vNW, uLight));
     vec3 col = mix(vec3(0.85, 0.48, 0.18), vec3(1.0, 0.84, 0.52), lit);
-    gl_FragColor = vec4(col * i * (1.6 + uPulse * 2.0) * lit, 1.0);
+    gl_FragColor = vec4(col * i * (0.45 + uPulse) * lit, 1.0);
   }`;
 
 const pointsVert = /* glsl */ `
@@ -243,7 +245,7 @@ export class GlobeStage {
 
   constructor(private opts: StageOptions) {
     this.mode = opts.mode;
-    this.reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('motion-reduced');
     const isSmall = Math.min(window.innerWidth, window.innerHeight) < 700;
     this.dpr = Math.min(window.devicePixelRatio || 1, isSmall ? 1.5 : 1.75);
 
@@ -330,7 +332,7 @@ export class GlobeStage {
       transparent: true,
       depthWrite: false,
     });
-    const atmo = new Mesh(new SphereGeometry(1.16, 64, 48), this.atmoMat);
+    const atmo = new Mesh(new SphereGeometry(1.045, 64, 48), this.atmoMat);
     this.globeAnchor.add(atmo);
   }
 
@@ -372,7 +374,7 @@ export class GlobeStage {
     geo.setAttribute('position', new BufferAttribute(pos, 3));
     geo.setAttribute('aSize', new BufferAttribute(size, 1));
     geo.setAttribute('aPhase', new BufferAttribute(phase, 1));
-    this.spin.add(new Points(geo, this.pointsMaterial('#e9c983', 9, false, false)));
+    this.spin.add(new Points(geo, this.pointsMaterial('#c19a56', 5, false, false)));
   }
 
   private buildCities(data: Float32Array) {
@@ -430,7 +432,7 @@ export class GlobeStage {
       const holder = new Group();
       holder.rotation.set(s.rotX, 0, s.rotZ);
       holder.add(line);
-      const sat = new Mesh(new SphereGeometry(0.022, 12, 10), new MeshPhysicalMaterial({ color: '#f1dca6', emissive: '#d6b26e', emissiveIntensity: 1.2 }));
+      const sat = new Mesh(new SphereGeometry(0.010, 12, 10), new MeshPhysicalMaterial({ color: '#f1dca6', emissive: '#d6b26e', emissiveIntensity: 1.2 }));
       holder.add(sat);
       this.satellites.push({ mesh: sat, curve, speed: s.speed, offset: Math.random() });
       this.rings.add(holder);
@@ -508,12 +510,17 @@ export class GlobeStage {
     const portrait = w / h < 0.9;
     if (mode === 'intro') {
       // Emblem width ≈ 2.4 units at ds = 1, height 2.
-      const ds = Math.min(1.4, (w * 0.82) / 2.45, (h * (portrait ? 0.36 : 0.47)) / 2);
-      const dy = portrait ? h * 0.16 : h * 0.135;
+      const ds = Math.min(1.52, (w * 0.70) / 2.45, h * 0.22);
+      const dy = portrait ? h * 0.24 : h * 0.19;
+      // Keep the planet's lower edge above the name, tagline and START button.
+      const gz = -1.8;
+      const k = this.camera.position.z / (this.camera.position.z - gz);
+      const gs = Math.min(w * 0.44, h * (portrait ? 0.2 : 0.25));
+      const bottomY = (0.5 - (portrait ? 0.6 : 0.66)) * h;
       return {
         dx: 0, dy, dz: 0, ds, dRot: -0.18, dOpacity: 1,
-        gx: (0.78 - 0.84) * ds, gy: dy, gz: -0.55 * ds, gs: 0.74 * ds,
-        ringScale: 0.95, ringTilt: 0,
+        gx: 0, gy: bottomY / k + gs, gz, gs,
+        ringScale: 1.12, ringTilt: -0.4,
         light: new Vector3(-0.55, 0.45, 0.7).normalize(),
         spin: 0.09, rim: 1, rimPow: 3,
       };
@@ -528,14 +535,14 @@ export class GlobeStage {
       };
     }
     // hero: a vast planet horizon rising from the bottom of the frame
-    const gs = portrait ? w * 1.2 : Math.max(w * 0.6, h * 1.05);
-    const visibleCap = portrait ? h * 0.1 : h * 0.17;
+    const gs = portrait ? w * 0.55 : h * 0.35;
+    
     return {
       dx: 0, dy: h * 0.35, dz: 3.2, ds: 1.6, dRot: 0.9, dOpacity: 0,
-      gx: portrait ? 0 : w * 0.1, gy: -h / 2 - gs + visibleCap, gz: -1.2, gs,
+      gx: portrait ? w * 0.30 : w * 0.27, gy: portrait ? -h * 0.29 : h * 0.05, gz: -2, gs,
       ringScale: 1, ringTilt: -0.55,
-      light: new Vector3(0.12, 0.24, -1).normalize(),
-      spin: 0.035, rim: 0.42, rimPow: 9,
+      light: new Vector3(-0.3, 0.5, 0.7).normalize(),
+      spin: 0.045, rim: 0.8, rimPow: 4,
     };
   }
 
@@ -690,6 +697,7 @@ export class GlobeStage {
 
   private renderOnce() {
     if (!this.layout) return;
+    if(this.mode === 'hero') this.camera.position.y = this.reduced ? 0 : Math.min(1, window.scrollY / innerHeight) * .65;
     this.renderer.render(this.scene, this.camera);
   }
 
@@ -708,7 +716,7 @@ export class GlobeStage {
   private frame(now: number) {
     const dt = Math.min(0.05, (now - this.last) / 1000);
     this.last = now;
-    this.time += dt;
+    if (!this.reduced) this.time += dt;
     this.adaptQuality(dt);
 
     // Composition transition
@@ -767,6 +775,7 @@ export class GlobeStage {
     for (const m of this.pointMats) m.uniforms.uTime.value = this.time;
     if (this.starsMat) this.starsMat.uniforms.uTime.value = this.time;
 
+    if(this.mode === 'hero') this.camera.position.y = this.reduced ? 0 : Math.min(1, window.scrollY / innerHeight) * .65;
     this.renderer.render(this.scene, this.camera);
   }
 
@@ -777,3 +786,7 @@ export class GlobeStage {
     this.renderer.dispose();
   }
 }
+
+
+
+

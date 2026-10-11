@@ -4,6 +4,7 @@ import '@fontsource-variable/bodoni-moda/opsz.css';
 import '@fontsource-variable/bodoni-moda/opsz-italic.css';
 import '@fontsource-variable/instrument-sans/wdth.css';
 import '../styles/global.css';
+import '../styles/cinematic.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ChapterRail from '../components/ChapterRail.astro';
@@ -83,6 +84,9 @@ const personLd = {
       (function () {
         var d = document.documentElement;
         d.classList.add('js');
+        var opts = new URLSearchParams(location.search);
+        if(opts.get('render') === 'static') d.dataset.render = 'static';
+        if(opts.get('motion') === 'reduce') d.classList.add('motion-reduced');
         if (d.dataset.intro !== 'enabled') return;
         var seen = false;
         try { seen = localStorage.getItem('kd-intro-done') === '1'; } catch (e) {}
@@ -105,6 +109,10 @@ const personLd = {
     <script>
       import { initUI } from '../scripts/ui';
       initUI();
+      if(document.querySelector('[data-exhibit]')) {
+        const io = new IntersectionObserver((entries) => { if(entries.some(e=>e.isIntersecting)) { io.disconnect(); import('../scripts/exhibits').then(m=>m.initExhibits()); } }, {rootMargin:'200px'});
+        document.querySelectorAll('[data-exhibit]').forEach(e=>io.observe(e));
+      }
     </script>
   </body>
 </html>
@@ -146,3 +154,5 @@ const personLd = {
     box-shadow: 0 20px 50px -20px rgb(214 178 110 / 0.4);
   }
 </style>
+
+

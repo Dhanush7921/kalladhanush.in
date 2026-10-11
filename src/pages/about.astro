@@ -3,13 +3,9 @@ import { url } from '../lib/url';
 import { Picture } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
-import Gallery from '../components/Gallery.astro';
-import { site, contact } from '../data/site';
-import { publishedGallery, photos } from '../data/gallery';
 
-const portraits = ['seaside', 'heritage-portrait', 'olive-shirt', 'night-garden']
-  .map((id) => publishedGallery.find((p) => p.id === id))
-  .filter((p): p is NonNullable<typeof p> => !!p);
+import { site, contact } from '../data/site';
+import { photos } from '../data/gallery';
 
 const facts = [
   { k: 'Known as', v: site.knownAs },
@@ -31,8 +27,8 @@ const interests = ['Motorcycles', 'Travel', 'Photography', 'Videography', 'Fitne
     <div class="container story-grid">
       <figure class="lead-photo">
         <Picture
-          src={photos.portraitNight}
-          alt="Dhanush in a light shirt at night among illuminated banana leaves."
+          src={photos.portraitOlive}
+          alt="Dhanush in an olive shirt beside a carved stone pillar."
           widths={[420, 640, 900]}
           sizes="(min-width: 960px) 38vw, 92vw"
           formats={['avif', 'webp']}
@@ -84,15 +80,15 @@ const interests = ['Motorcycles', 'Travel', 'Photography', 'Videography', 'Fitne
   <section class="chapter">
     <div class="container">
       <div class="chapter-head split">
-        <h2 class="display-l">Portraits</h2>
+        <h2 class="display-l">Beyond the work</h2>
         <div>
-          <p class="lede">A few frames from in front of the lens.</p>
+          <p class="lede">The interests that keep me curious.</p>
           <ul class="interests" aria-label="Interests">
             {interests.map((i) => <li class="tag">{i}</li>)}
           </ul>
         </div>
       </div>
-      <Gallery items={portraits} filters={false} />
+      
       <div class="next-links">
         <a class="btn btn-gold" href={url('/journey/')}>Follow my journey</a>
         <a class="btn" href={url('/world/')}>See my world</a>
@@ -125,3 +121,4 @@ const interests = ['Motorcycles', 'Travel', 'Photography', 'Videography', 'Fitne
   .next-links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2.5rem; }
   @media (max-width: 520px) { .facts div { grid-template-columns: 1fr; gap: 0.2rem; } }
 </style>
+
