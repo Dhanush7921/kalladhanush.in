@@ -1,14 +1,13 @@
 {
-  "name": "Kalla Dhanush",
-  "short_name": "Dhanush",
-  "description": "AI & ML Engineer | Video Editor | Photographer",
-  "start_url": "./",
-  "scope": "./",
-  "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "name": "Kalla Dhanush — Beyond Vision. Into Reality.",
+  "short_name": "Kalla Dhanush",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
-  ]
+  ],
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#080808",
+  "theme_color": "#080808"
 }

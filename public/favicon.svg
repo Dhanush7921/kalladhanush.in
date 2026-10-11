@@ -1,1 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6e5b8"/><stop offset=".45" stop-color="#d6b26e"/><stop offset="1" stop-color="#9a6a3a"/></linearGradient></defs><rect width="64" height="64" rx="14" fill="#000"/><path fill="url(#g)" fill-rule="evenodd" d="M12 13h20.5C44 13 52 21.5 52 32S44 51 32.5 51H12v-1.6c2.4 0 4-.4 4-2.4V17c0-2-1.6-2.4-4-2.4Zm12 1.6V49.4h8c7.6 0 12-7.4 12-17.4s-4.4-17.4-12-17.4Z"/><circle cx="56" cy="47.5" r="3.5" fill="url(#g)"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" gradientUnits="userSpaceOnUse" x1="8" y1="8" x2="56" y2="56">
+      <stop offset="0" stop-color="#FFE7A3"/>
+      <stop offset=".5" stop-color="#FFC52E"/>
+      <stop offset="1" stop-color="#F08A00"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#070707"/>
+  <rect x=".75" y=".75" width="62.5" height="62.5" rx="13.25" fill="none" stroke="#5C3200" stroke-width="1.5"/>
+  <g fill="none" stroke="url(#g)">
+    <path d="M14 12v40" stroke-width="7"/>
+    <path d="M36.5 12 20.5 32l18 20" stroke-width="6.5" stroke-linejoin="miter"/>
+    <path d="M35 12h1.5a20 20 0 0 1 0 40H35" stroke-width="5"/>
+    <path d="m33 25 7 7-7 7" stroke-width="4"/>
+  </g>
+</svg>

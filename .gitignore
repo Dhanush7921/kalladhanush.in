@@ -1,27 +1,9 @@
-# build output
-dist/
-.astro/
-
-# dependencies
-node_modules/
-
-# logs
-npm-debug.log*
-
-# environment and secrets - never commit
+node_modules
+dist
+.vite
+*.local
 .env
 .env.*
-!.env.example
-
-# private material that must never be published
-drafts/
-originals/
-*.zip
-*.HEIC
-*.heic
-
-# OS / editor
 .DS_Store
 Thumbs.db
-.vscode/
-.idea/
+npm-debug.log*

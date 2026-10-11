@@ -1,0 +1,320 @@
+.world {
+  background:
+    radial-gradient(60% 50% at 80% 20%, rgba(122, 65, 0, 0.2), transparent 70%),
+    #060606;
+  border-block: 1px solid rgba(255, 196, 92, 0.06);
+}
+.world__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: clamp(44px, 5vw, 72px);
+}
+.world__filters .chip {
+  min-height: 38px;
+  padding: 0 15px;
+}
+
+.world__grid {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(230px, auto));
+  grid-template-areas:
+    'travel travel photo pillar'
+    'travel travel film pillar'
+    'moto exp exp pillar';
+}
+.world__grid.is-filtered {
+  grid-template-areas: none;
+  grid-template-rows: none;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 520px));
+}
+.world__grid.is-filtered .wtile--photo {
+  aspect-ratio: 4 / 5;
+}
+.wtile {
+  position: relative;
+  min-height: 230px;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+.js .world__wrap:not(.is-in) .wtile {
+  opacity: 0;
+}
+.world__wrap.is-in .wtile {
+  animation: card-in 700ms var(--ease-out) both;
+  animation-delay: calc(var(--i) * 70ms);
+}
+
+/* Photo tiles */
+.wtile__btn {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  text-align: left;
+  border-radius: inherit;
+  overflow: hidden;
+}
+.wtile__btn picture,
+.wtile__btn img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.wtile__btn img {
+  object-fit: cover;
+  object-position: 50% 40%;
+  transition:
+    transform 1400ms var(--ease-out),
+    filter var(--d-3) var(--ease-out);
+}
+.wtile--photo:hover img {
+  transform: scale(1.05);
+}
+.wtile__shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(5, 5, 5, 0.92) 0%, rgba(5, 5, 5, 0.45) 30%, transparent 58%),
+    linear-gradient(200deg, rgba(255, 170, 60, 0.12), transparent 40%);
+}
+.wtile__btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 196, 92, 0.16);
+  transition: box-shadow var(--d-3) var(--ease-out);
+}
+.wtile__btn:hover::after,
+.wtile__btn:focus-visible::after {
+  box-shadow: inset 0 0 0 1px rgba(255, 210, 120, 0.6);
+}
+.wtile__caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  gap: 6px;
+  padding: clamp(18px, 2.4vw, 28px);
+}
+.wtile__theme {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--c-gold-soft);
+}
+.wtile__theme .icon {
+  width: 15px;
+  height: 15px;
+}
+.wtile__title {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 1.2rem + 0.9vw, 2.2rem);
+  line-height: 1.05;
+  color: var(--c-text);
+}
+.wtile__text {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--c-text-2);
+  max-width: 44ch;
+}
+.wtile__zoom {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(8, 8, 8, 0.6);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--c-line-2);
+  color: var(--c-gold);
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity var(--d-2),
+    transform var(--d-2) var(--ease-spring);
+}
+.wtile--photo:hover .wtile__zoom,
+.wtile__btn:focus-visible .wtile__zoom {
+  opacity: 1;
+  transform: none;
+}
+
+/* Editorial panels (no media yet) */
+.wtile__panel {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: clamp(20px, 2.4vw, 28px);
+  background:
+    radial-gradient(90% 70% at 100% 0%, rgba(122, 65, 0, 0.3), transparent 60%),
+    var(--g-titanium);
+  box-shadow: inset 0 0 0 1px rgba(255, 196, 92, 0.1);
+  border-radius: inherit;
+  transition: box-shadow var(--d-3) var(--ease-out);
+}
+.wtile__panel:hover {
+  box-shadow: inset 0 0 0 1px rgba(255, 196, 92, 0.32);
+}
+.wtile__icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: auto;
+  border-radius: 14px;
+  color: var(--c-gold);
+  border: 1px solid var(--c-line-2);
+  background: rgba(255, 170, 30, 0.05);
+}
+.wtile__icon .icon {
+  width: 24px;
+  height: 24px;
+}
+.wtile__panel .wtile__title {
+  margin-top: 18px;
+  font-size: clamp(1.4rem, 1.15rem + 0.7vw, 1.85rem);
+}
+.wtile__panel .wtile__text {
+  color: var(--c-text-3);
+}
+.wtile__soon {
+  margin-top: 6px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--c-text-3);
+}
+.wtile__soon::before {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 1px;
+  margin-right: 10px;
+  vertical-align: middle;
+  background: var(--c-gold);
+}
+
+/* Lightbox */
+.lightbox {
+  width: min(1100px, calc(100vw - 32px));
+  background: #050505;
+  overflow: visible;
+}
+.lightbox__figure {
+  display: grid;
+  gap: 0;
+}
+.lightbox__img img {
+  display: block;
+  width: 100%;
+  max-height: calc(88vh - 70px);
+  object-fit: contain;
+  background: #050505;
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+}
+.lightbox figcaption {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 22px;
+  font-family: var(--f-display);
+  font-size: 1.3rem;
+  font-style: italic;
+}
+.lightbox__theme {
+  font-family: var(--f-sans);
+  font-style: normal;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--c-gold-soft);
+}
+.lightbox__nav {
+  position: absolute;
+  right: 16px;
+  bottom: 12px;
+  display: flex;
+  gap: 8px;
+}
+.lightbox__nav button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--c-line-2);
+  transition: border-color var(--d-2);
+}
+.lightbox__nav button:hover {
+  border-color: var(--c-gold);
+}
+
+@media (max-width: 999px) {
+  .world__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: 360px repeat(3, minmax(220px, auto));
+    grid-template-areas:
+      'travel travel'
+      'photo pillar'
+      'film pillar'
+      'moto exp';
+  }
+}
+@media (max-width: 599px) {
+  .world__grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    grid-template-areas:
+      'travel'
+      'photo'
+      'film'
+      'pillar'
+      'moto'
+      'exp';
+  }
+  .wtile--photo {
+    aspect-ratio: 4 / 5;
+  }
+  .wtile--panel {
+    min-height: 0;
+  }
+  .wtile__panel .wtile__icon {
+    margin-bottom: 0;
+  }
+  .world__filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: calc(100% + var(--gutter) * 2);
+    margin-inline: calc(var(--gutter) * -1);
+    padding: 4px var(--gutter);
+    scrollbar-width: none;
+  }
+  .world__filters::-webkit-scrollbar {
+    display: none;
+  }
+  .world__filters .chip {
+    flex: none;
+  }
+}

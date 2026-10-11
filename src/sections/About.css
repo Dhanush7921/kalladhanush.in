@@ -1,0 +1,313 @@
+.about {
+  background:
+    radial-gradient(50% 40% at 15% 20%, rgba(122, 65, 0, 0.18), transparent 70%),
+    var(--c-bg);
+}
+.about__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(48px, 7vw, 120px);
+  align-items: center;
+}
+
+/* Photo */
+.about__media {
+  position: relative;
+}
+.about__frame {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--c-line-2);
+  transform: translate(22px, 22px);
+}
+.about__frame::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 64px;
+  height: 64px;
+  border-right: 1px solid var(--c-gold);
+  border-bottom: 1px solid var(--c-gold);
+  border-bottom-right-radius: var(--r-lg);
+}
+.about__photo {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-deep);
+}
+.about__photo picture,
+.about__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.about__photo img {
+  object-fit: cover;
+  object-position: 50% 35%;
+}
+.about__photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to top, rgba(8, 8, 8, 0.55), transparent 32%),
+    linear-gradient(200deg, rgba(255, 190, 90, 0.12), transparent 45%);
+}
+.about__chip {
+  position: absolute;
+  left: clamp(-28px, -2vw, -12px);
+  bottom: 36px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: rgba(10, 9, 8, 0.78);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--c-line-2);
+  font-size: 0.82rem;
+  color: var(--c-text-2);
+  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.8);
+}
+.about__chip strong {
+  color: var(--c-text);
+  font-weight: 600;
+}
+.about__chip .icon {
+  color: var(--c-gold);
+}
+
+/* Body */
+.about__intro {
+  margin-top: 30px;
+  font-size: var(--fs-lg);
+  line-height: 1.8;
+  color: var(--c-text-2);
+  max-width: 60ch;
+}
+.about__traits {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 26px 36px;
+  margin-top: 44px;
+}
+.trait {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.trait:last-child {
+  grid-column: 1 / -1;
+  max-width: 50%;
+}
+.trait__icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  color: var(--c-gold);
+  border: 1px solid var(--c-line-2);
+  background: radial-gradient(circle at 30% 25%, rgba(255, 200, 90, 0.16), rgba(20, 16, 12, 0.6) 65%);
+}
+.trait__icon .icon {
+  width: 21px;
+  height: 21px;
+}
+.trait__title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.trait__text {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--c-text-3);
+}
+
+/* Journey */
+.journey {
+  margin-top: clamp(96px, 11vw, 160px);
+}
+.journey__head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+.journey__label {
+  font-family: var(--f-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: var(--fs-h3);
+}
+.journey__list {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr));
+  gap: 0 clamp(24px, 3vw, 48px);
+  margin: 0;
+}
+.journey__list::before {
+  content: '';
+  position: absolute;
+  top: 7px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--c-gold), rgba(255, 140, 0, 0.5) 70%, transparent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 1600ms var(--ease-out) 200ms;
+}
+.journey__list.is-in::before {
+  transform: none;
+}
+.journey__item {
+  position: relative;
+  padding-top: 40px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 700ms var(--ease-out),
+    transform 700ms var(--ease-out);
+  transition-delay: calc(400ms + var(--i) * 220ms);
+}
+.journey__list.is-in .journey__item {
+  opacity: 1;
+  transform: none;
+}
+.journey__node {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid var(--c-gold);
+  background: var(--c-bg);
+  box-shadow: 0 0 0 5px rgba(255, 170, 30, 0.07);
+}
+.journey__node::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: var(--c-gold);
+}
+.is-current .journey__node::before,
+.pulse-ring::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 150, 20, 0.55), rgba(255, 140, 0, 0) 70%);
+  animation: node-pulse 2.6s var(--ease-in-out) infinite;
+}
+@keyframes node-pulse {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(0.7);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.25);
+  }
+}
+.journey__kind {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--c-gold-soft);
+}
+.journey__now {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(255, 170, 30, 0.12);
+  border: 1px solid var(--c-line-2);
+  letter-spacing: 0.14em;
+  color: var(--c-gold);
+}
+.journey__title {
+  margin-top: 12px;
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: clamp(1.45rem, 1.2rem + 0.7vw, 1.85rem);
+  line-height: 1.12;
+}
+.journey__place {
+  margin-top: 8px;
+  font-weight: 700;
+  color: var(--c-text);
+  font-size: 0.95rem;
+}
+.journey__when {
+  margin-top: 2px;
+  font-size: 0.82rem;
+  color: var(--c-gold-soft);
+}
+.journey__text {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: var(--c-text-3);
+  max-width: 40ch;
+}
+
+@media (max-width: 1000px) {
+  .about__grid {
+    grid-template-columns: 1fr;
+  }
+  .about__media {
+    max-width: 520px;
+    width: calc(100% - 22px);
+  }
+  .about__traits {
+    grid-template-columns: 1fr;
+  }
+  .trait:last-child {
+    max-width: none;
+  }
+}
+@media (max-width: 760px) {
+  .journey__list {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    padding-left: 34px;
+  }
+  .journey__list::before {
+    top: 0;
+    bottom: 0;
+    left: 7px;
+    right: auto;
+    width: 1px;
+    height: auto;
+    background: linear-gradient(180deg, var(--c-gold), rgba(255, 140, 0, 0.4) 80%, transparent);
+    transform: scaleY(0);
+    transform-origin: 50% 0;
+  }
+  .journey__item {
+    padding-top: 0;
+  }
+  .journey__node {
+    left: -34px;
+    top: 2px;
+  }
+  .about__chip {
+    left: 12px;
+    bottom: 16px;
+  }
+}

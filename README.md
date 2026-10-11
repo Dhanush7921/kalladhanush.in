@@ -1,87 +1,60 @@
-# kalladhanush.in
+# Kalla Dhanush — Personal Portfolio
 
-The personal website of **Kalla Dhanush** — *AI & ML Engineer | Video Editor | Photographer*.
-*Beyond Vision. Into Reality.*
+**Beyond Vision. Into Reality.** — https://kalladhanush.in
 
-A static, cinematic 3D portfolio built with **Astro**, **TypeScript** and **Three.js**, deployed for free on **GitHub Pages** with GitHub Actions.
+A static, single-page portfolio built with **React 19 + TypeScript + Vite**, one lazy-loaded **Three.js** hero scene, and hand-written CSS. No backend, no database, no trackers, no paid services.
 
-- Real-time WebGL Earth with golden lighting, dotted continents, city lights and orbital paths
-- Intro with an extruded metal **D.** monogram, START / SKIP, remembered on return, replayable
-- Pages: About, Journey, Projects (+ one page per project), Skills, Achievements, My World, Vision, Creator's Journal, Connect, 404
-- WebGL fallback, `prefers-reduced-motion` support, keyboard navigation, responsive layouts, sitemap and Open Graph tags
+## Run it
 
----
+Requires Node.js 20.19+ (22 LTS recommended).
 
-## Run it on Windows
-
-1. Install **Node.js 22 LTS** from <https://nodejs.org> (tick "Add to PATH") and **Git** from <https://git-scm.com>.
-2. Open **PowerShell** and run:
-
-   ```powershell
-   git clone https://github.com/Dhanush7921/kalladhanush.in.git
-   cd kalladhanush.in
-   npm ci
-   npm run dev
-   ```
-
-3. Open <http://localhost:4321>. Edits reload automatically.
-
-| Command | What it does |
-| --- | --- |
-| `npm run dev` | Local development server |
-| `npm run build` | Production build into `dist/` |
-| `npm run preview` | Serve the production build locally |
-| `npm run check` | TypeScript and Astro checks |
-
-> Tip: to see the intro again, use **Replay intro** in the footer or menu, or open `http://localhost:4321/?intro=1`.
-
----
-
-## Edit the content
-
-Everything the site says lives in typed files under `src/data/`:
-
-| File | Controls |
-| --- | --- |
-| `site.ts` | Name, title, tagline, location, contact links, navigation, résumé link |
-| `projects.ts` | Project cards and project pages |
-| `journey.ts` | Timeline entries |
-| `skills.ts` | Skill groups (no percentages by design) |
-| `achievements.ts` | Certificates — add only verified ones |
-| `gallery.ts` | My World photos and captions |
-| `vision.ts` | Roadmap (clearly marked as goals) |
-
-**Publication flags.** Every project, timeline entry, photo and certificate has `published: true | false`. Unpublished items are left out of the live build entirely (no card, no page, no sitemap entry). To preview drafts locally in PowerShell:
-
-```powershell
-$env:SHOW_DRAFTS = "true"; npm run dev
+```bash
+npm install        # first time only — creates package-lock.json (commit it)
+npm run dev        # local dev server → http://localhost:5173
+npm run build      # type-check + production build → dist/
+npm run preview    # serve the production build → http://localhost:4173
 ```
 
-Company or client work stays `published: false` until public release is approved. Keep the detailed write-ups for those projects **outside** this public repository until then.
+## Where things live
 
-**Photos.** Put web-ready copies (JPEG, about 2000 px on the long side, EXIF removed) in `src/assets/photos/` and reference them from `gallery.ts`. Astro generates AVIF and WebP versions automatically. Never commit original photo collections or ZIP files (`.gitignore` blocks the common ones).
+| Path | What it is |
+| --- | --- |
+| `src/content/portfolio.ts` | **All text and data** — roles, about, journey, projects, skills, experience, My World, vision, journal, contact links |
+| `src/content/assets.ts` | Photo + logo registry (responsive AVIF/WebP sources and alt text) |
+| `src/styles/tokens.css` | Design tokens — palette, gradients, type scale, motion, spacing, self-hosted fonts |
+| `src/sections/*` | One component + stylesheet per section (Hero, About, Projects, Skills, Experience, MyWorld, Vision, Journal, Contact) |
+| `src/components/*` | Shared UI — navbar, footer, intro, icons, buttons, project artwork, particles |
+| `src/three/globeScene.ts` | The WebGL globe/orbit scene (loaded only on capable devices, after the intro) |
+| `public/` | Favicons, OG image, fonts, manifest, robots.txt, sitemap.xml |
+| `.github/workflows/deploy.yml` | Build + deploy to GitHub Pages on every push to `main` |
 
-**Journal.** Add a Markdown file to `src/content/journal/` (see `_template.md`) and set `published: true`.
+### Common edits
 
-**Résumé.** Put the PDF in `public/` and set `contact.resume` in `site.ts` (for example `'/kalla-dhanush-resume.pdf'`). The download button appears automatically on the Connect page.
+- **Contact links** — `contact` in `portfolio.ts`. Empty strings are hidden automatically (e.g. add your LinkedIn URL there).
+- **Publish a confidential project's details** — set `visibility: 'public'` and fill `problem / approach / role / outcome / stack` for that project.
+- **Remove a project** — delete its entry from `projects`.
+- **Certificates** — put the image in `src/assets/`, import it in `portfolio.ts`, add it to `certificates`. The "certificate wall" placeholder disappears automatically.
+- **Journal articles** — add entries to `journal`; the "coming soon" panel switches to a list.
+- **Skill depth labels** — edit `depth` per discipline (no percentage bars by design).
 
----
+## Motion, 3D and accessibility
 
-## Deployment
+- Opening KD particle animation plays once per browser session, has a **Skip intro** button (and `Esc`), and never plays for reduced-motion users or deep links. "Replay intro" lives in the footer.
+- The WebGL scene starts after the intro, pauses off-screen and in background tabs, caps device-pixel-ratio, and disposes everything on unmount. Devices with ≤2 CPU threads, Save-Data, no WebGL or `prefers-reduced-motion` get a lightweight SVG globe instead.
+- Keyboard: skip link, visible focus rings, arrow-key tabs in Skills, `Esc` closes menu/dialogs, native `<dialog>` focus handling.
 
-Pushing to `main` runs `.github/workflows/deploy.yml`, which installs dependencies, type-checks, builds, checks that no unpublished project slipped into the output, and deploys `dist/` to GitHub Pages.
+## Deploying to GitHub Pages (free)
 
-Repository settings: **Settings → Pages → Source: GitHub Actions**.
+The workflow builds with the correct base path automatically:
+`/` when a custom domain is set, `/kalladhanush.in/` on `dhanush7921.github.io`.
 
-**Current address (temporary):** <https://dhanush7921.github.io/kalladhanush.in/> — used while `kalladhanush.in` awaits GoDaddy registrant verification. All internal links and assets go through `src/lib/url.ts`, so the base path is set in one place.
+1. Push this project to `main` of **Dhanush7921/kalladhanush.in**.
+2. Repo → **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+3. Wait for the "Deploy to GitHub Pages" workflow to go green.
 
-**Switching back to kalladhanush.in** (no rebuild of the site needed):
+### Custom domain (once GoDaddy's verification hold is cleared)
 
-1. In `astro.config.mjs` set `USE_CUSTOM_DOMAIN = true` (root base path; the build writes `dist/CNAME`), commit and push.
-2. GitHub → Settings → Pages → Custom domain: enter `kalladhanush.in` and save.
-3. Set the DNS records below at GoDaddy, wait for the DNS check to pass, then tick **Enforce HTTPS**.
-
-DNS for `kalladhanush.in` (at the registrar):
+At GoDaddy → DNS for `kalladhanush.in` (leave MX/TXT and other records untouched):
 
 | Type | Name | Value |
 | --- | --- | --- |
@@ -95,25 +68,12 @@ DNS for `kalladhanush.in` (at the registrar):
 | AAAA | @ | 2606:50c0:8003::153 |
 | CNAME | www | dhanush7921.github.io |
 
-Leave email records (MX, SPF/DKIM TXT) untouched. GitHub redirects `www` to the apex domain automatically.
-
----
-
-## The 3D Earth data
-
-`public/earth/` holds a texture and point data generated from [Natural Earth](https://www.naturalearthdata.com/) (public domain) by `scripts/generate-earth.py`:
-
-```powershell
-pip install pillow
-python scripts/generate-earth.py path\to\natural-earth-geojson public\earth
-```
-
-It needs `ne_50m_land.geojson` and `ne_50m_populated_places_simple.geojson` from the Natural Earth vector repository.
+Remove any GoDaddy "parked"/forwarding A record on `@` first, and don't add wildcard (`*`) records.
+Then: GitHub profile → Settings → Pages → **verify** `kalladhanush.in` → repo → Settings → Pages → Custom domain `kalladhanush.in` → **Enforce HTTPS** (can take up to 24 h to become available).
+No `CNAME` file is needed with an Actions deployment.
+Reference: https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site
 
 ## Credits
 
-- [Astro](https://astro.build) and [Three.js](https://threejs.org) (MIT)
-- Fonts: Bodoni Moda and Instrument Sans (SIL Open Font License), self-hosted via Fontsource
-- Map data: Natural Earth (public domain)
-
-Site content © Kalla Dhanush. All rights reserved.
+Fonts: Manrope and Cormorant Garamond (SIL Open Font License — see `public/fonts/`).
+Globe land outline derived from Natural Earth (public domain).
