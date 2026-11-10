@@ -250,9 +250,7 @@
   margin-inline: auto;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition:
-    transform 520ms var(--ease-out),
-    opacity var(--d-3) var(--ease-out);
+  transition: transform 520ms var(--ease-out);
 }
 .deva__logo > * {
   grid-area: 1 / 1;
@@ -371,8 +369,10 @@
 }
 
 @media (max-width: 979px) {
-  .deva__logo {
+  .deva__stage {
     order: -1;
+  }
+  .deva__logo {
     max-width: 460px;
   }
 }

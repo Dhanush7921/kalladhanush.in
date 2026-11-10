@@ -170,6 +170,8 @@ export default function Deva() {
           </p>
         </div>
 
+        {/* The reveal class lives on a wrapper: React owns the link's className (is-live), so it must not carry it. */}
+        <div className="deva__stage" data-reveal="scale">
         <a
           ref={logo}
           className={`deva__logo${live ? ' is-live' : ''}`}
@@ -180,7 +182,6 @@ export default function Deva() {
           onFocus={hover(true)}
           onBlur={hover(false)}
           aria-label="Enter the Transformation — open DHANUSH to DEVA"
-          data-reveal="scale"
         >
           <span className="deva__glow" aria-hidden="true" />
           <span className="deva__ring" aria-hidden="true" />
@@ -188,6 +189,7 @@ export default function Deva() {
           <span ref={mount} className="deva__webgl" aria-hidden="true" />
           <span className="deva__shock" aria-hidden="true" />
         </a>
+        </div>
       </div>
     </section>
   );
