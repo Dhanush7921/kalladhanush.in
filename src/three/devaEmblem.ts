@@ -100,8 +100,8 @@ function buildEnvironment(renderer: THREE.WebGLRenderer): THREE.Texture {
   panel(0xc1121f, 3.4, 3.5, 6, [8, 0.5, -0.5]); // crimson wall, right
   panel(0xffffff, 8, 1.2, 1.2, [2.5, 3, 7]); // key highlight
   panel(0xff3b14, 2.2, 10, 2, [0, -7, -2]); // ember floor
-  panel(0xaab3c0, 1.5, 12, 9, [0, 2.5, 9]); // broad cool steel wash from the front
-  panel(0xf2f5fa, 4, 1, 7, [-4.5, 2, 7]); // tall soft strip, front left
+  panel(0x8e97a6, 0.42, 12, 9, [0, 2.5, 9]); // broad cool steel wash from the front
+  panel(0xf2f5fa, 3.4, 0.9, 7, [-4.5, 2, 7]); // tall soft strip, front left
   panel(0x3a4250, 2, 8, 8, [0, 0, -9]); // dim steel backdrop
   const pmrem = new THREE.PMREMGenerator(renderer);
   const target = pmrem.fromScene(env, 0.035);
@@ -179,14 +179,14 @@ export function createDevaEmblem(container: HTMLElement, opts: DevaEmblemOptions
   const envMap = buildEnvironment(renderer);
   const steel = steelTexture();
   const metal = new THREE.MeshStandardMaterial({
-    color: 0xc4c7cc,
+    color: 0x9a9fa8,
     metalness: 1,
-    roughness: 0.46,
+    roughness: 0.4,
     roughnessMap: steel,
     bumpMap: steel,
     bumpScale: 0.35,
     envMap,
-    envMapIntensity: 1.25,
+    envMapIntensity: 1.15,
   });
   const edge = new THREE.MeshStandardMaterial({ color: 0xe9ebee, metalness: 1, roughness: 0.2, envMap, envMapIntensity: 1.5 });
 
@@ -221,11 +221,11 @@ export function createDevaEmblem(container: HTMLElement, opts: DevaEmblemOptions
   scene.add(shock);
 
   // Lights: a furnace light that follows the cursor, a crimson rim, a cold fill.
-  const cursorLight = new THREE.PointLight(0xffb27a, 26, 14, 2);
+  const cursorLight = new THREE.PointLight(0xff9a5a, 12, 14, 2);
   cursorLight.position.set(1.5, 1, 3.2);
   const rim = new THREE.PointLight(0xc1121f, 40, 14, 2);
   rim.position.set(-3.2, 1.6, -1.8);
-  const fill = new THREE.DirectionalLight(0xdfe6f0, 1.6);
+  const fill = new THREE.DirectionalLight(0xdfe6f0, 0.55);
   fill.position.set(0.4, 3, 4);
   scene.add(cursorLight, rim, fill, new THREE.AmbientLight(0x221a18, 0.6));
 
@@ -316,7 +316,7 @@ export function createDevaEmblem(container: HTMLElement, opts: DevaEmblemOptions
     haloSprite.scale.setScalar(7.4 + hover * 0.8 + flash * 3);
 
     cursorLight.position.set(pointer.x * 4.2, pointer.y * 3 + 0.4, 3 + hover * 0.6);
-    cursorLight.intensity = 16 + hover * 26 + flash * 90;
+    cursorLight.intensity = 9 + hover * 12 + flash * 80;
     rim.intensity = 36 + Math.sin(t * 1.7) * 6 + flash * 40;
 
     const lift = 1 + hover * 0.8;
