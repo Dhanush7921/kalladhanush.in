@@ -33,7 +33,7 @@ function steelTexture(): THREE.CanvasTexture {
     g.fillStyle = `rgba(${v},${v},${v},${0.1 + rnd() * 0.22})`;
     g.fillRect(rnd() * size, rnd() * size, 1 + rnd() * 2, 1);
   }
-  for (let i = 0; i < 150; i++) {
+  for (let i = 0; i < 90; i++) {
     const x = rnd() * size;
     const y = rnd() * size;
     const len = 12 + rnd() * 80;
@@ -46,12 +46,12 @@ function steelTexture(): THREE.CanvasTexture {
     g.lineTo(x + Math.cos(a) * len, y + Math.sin(a) * len);
     g.stroke();
   }
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 8; i++) {
     const x = rnd() * size;
     const y = rnd() * size;
     const r = 4 + rnd() * 12;
     const grad = g.createRadialGradient(x, y, 0, x, y, r);
-    grad.addColorStop(0, 'rgba(34,34,34,0.5)');
+    grad.addColorStop(0, 'rgba(60,60,60,0.2)');
     grad.addColorStop(1, 'rgba(34,34,34,0)');
     g.fillStyle = grad;
     g.fillRect(x - r, y - r, r * 2, r * 2);
@@ -96,10 +96,12 @@ function buildEnvironment(renderer: THREE.WebGLRenderer): THREE.Texture {
     env.add(m);
   };
   panel(0xe6ecf5, 5, 9, 1.6, [0, 7, 3]); // cold overhead strip
-  panel(0xff6a1a, 6, 5, 5, [-7, -2.5, 2]); // furnace orange, low left
-  panel(0xc1121f, 5, 4, 7, [7.5, 0.5, 1]); // crimson wall, right
+  panel(0xff6a1a, 3.2, 4, 4, [-7.5, -3, 0.5]); // furnace orange, low left
+  panel(0xc1121f, 3.4, 3.5, 6, [8, 0.5, -0.5]); // crimson wall, right
   panel(0xffffff, 8, 1.2, 1.2, [2.5, 3, 7]); // key highlight
-  panel(0xff3b14, 3, 10, 2, [0, -7, -2]); // ember floor
+  panel(0xff3b14, 2.2, 10, 2, [0, -7, -2]); // ember floor
+  panel(0xaab3c0, 1.5, 12, 9, [0, 2.5, 9]); // broad cool steel wash from the front
+  panel(0xf2f5fa, 4, 1, 7, [-4.5, 2, 7]); // tall soft strip, front left
   panel(0x3a4250, 2, 8, 8, [0, 0, -9]); // dim steel backdrop
   const pmrem = new THREE.PMREMGenerator(renderer);
   const target = pmrem.fromScene(env, 0.035);
@@ -179,10 +181,10 @@ export function createDevaEmblem(container: HTMLElement, opts: DevaEmblemOptions
   const metal = new THREE.MeshStandardMaterial({
     color: 0xc4c7cc,
     metalness: 1,
-    roughness: 0.52,
+    roughness: 0.46,
     roughnessMap: steel,
     bumpMap: steel,
-    bumpScale: 0.6,
+    bumpScale: 0.35,
     envMap,
     envMapIntensity: 1.25,
   });
@@ -219,11 +221,11 @@ export function createDevaEmblem(container: HTMLElement, opts: DevaEmblemOptions
   scene.add(shock);
 
   // Lights: a furnace light that follows the cursor, a crimson rim, a cold fill.
-  const cursorLight = new THREE.PointLight(0xff7a2a, 26, 14, 2);
+  const cursorLight = new THREE.PointLight(0xffb27a, 26, 14, 2);
   cursorLight.position.set(1.5, 1, 3.2);
   const rim = new THREE.PointLight(0xc1121f, 40, 14, 2);
   rim.position.set(-3.2, 1.6, -1.8);
-  const fill = new THREE.DirectionalLight(0xcfd8e6, 0.5);
+  const fill = new THREE.DirectionalLight(0xdfe6f0, 1.6);
   fill.position.set(0.4, 3, 4);
   scene.add(cursorLight, rim, fill, new THREE.AmbientLight(0x221a18, 0.6));
 
@@ -314,7 +316,7 @@ export function createDevaEmblem(container: HTMLElement, opts: DevaEmblemOptions
     haloSprite.scale.setScalar(7.4 + hover * 0.8 + flash * 3);
 
     cursorLight.position.set(pointer.x * 4.2, pointer.y * 3 + 0.4, 3 + hover * 0.6);
-    cursorLight.intensity = 22 + hover * 22 + flash * 90;
+    cursorLight.intensity = 16 + hover * 26 + flash * 90;
     rim.intensity = 36 + Math.sin(t * 1.7) * 6 + flash * 40;
 
     const lift = 1 + hover * 0.8;
