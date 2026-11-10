@@ -8,6 +8,7 @@ import Projects from './sections/Projects';
 import Skills from './sections/Skills';
 import Experience from './sections/Experience';
 import MyWorld from './sections/MyWorld';
+import Deva from './sections/Deva';
 import Vision from './sections/Vision';
 import Journal from './sections/Journal';
 import Contact from './sections/Contact';
@@ -35,6 +36,7 @@ export default function App() {
         <Skills />
         <Experience />
         <MyWorld />
+        <Deva />
         <Vision />
         <Journal />
         <Contact />

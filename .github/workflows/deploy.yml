@@ -40,6 +40,20 @@ jobs:
           BASE_PATH: ${{ steps.pages.outputs.base_path }}/
         run: npm run build
 
+      # The DHANUSH → DEVA transformation app is a second, self-contained build served at /deva/.
+      # Relative asset URLs + hash routing: refresh and deep links work without a 404 fallback.
+      - name: Build DEVA (served at /deva/)
+        working-directory: deva
+        env:
+          # Optional repo variables. A Google OAuth *Client ID* is public by design; never put a client secret here.
+          GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
+          ALLOWED_EMAIL: ${{ vars.ALLOWED_EMAIL }}
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
+          cp -r dist ../dist/deva
+          test -f ../dist/index.html && test -f ../dist/deva/index.html
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

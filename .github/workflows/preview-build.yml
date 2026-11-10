@@ -1,0 +1,39 @@
+# Builds the deva-transformation branch on a clean runner and publishes the output (plus the build log)
+# to the preview-build branch so it can be browser-tested before anything reaches main.
+name: Preview build
+on:
+  push:
+    branches: [deva-transformation]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build portfolio + DEVA
+        run: |
+          set +e
+          {
+            npm ci && npm run build &&
+            (cd deva && npm install --no-audit --no-fund && { npm run typecheck || echo "deva typecheck reported issues"; } && npm run build) &&
+            cp -r deva/dist dist/deva
+          } > build.log 2>&1
+          echo "exit=$?" >> build.log
+          mkdir -p out
+          [ -d dist ] && cp -r dist/. out/
+          cp build.log out/build.log
+          touch out/.nojekyll
+      - name: Publish to preview-build
+        run: |
+          cd out
+          rm -f CNAME
+          git init -q -b preview-build
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Preview ${GITHUB_SHA::7}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" preview-build
