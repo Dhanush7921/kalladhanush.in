@@ -23,3 +23,9 @@ export function consumeTransfer() {
   try { sessionStorage.setItem('deva.imported', note); } catch { /* ignore */ }
   history.replaceState(null, '', `${location.pathname}${location.search}#/dashboard`);
 }
+// Same-tab case (link pasted into an already open app): merge, then let the router re-read the cleaned URL.
+addEventListener('hashchange', () => {
+  if (!/^#\/?import=/.test(location.hash)) return;
+  consumeTransfer();
+  dispatchEvent(new HashChangeEvent('hashchange'));
+});
