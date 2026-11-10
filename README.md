@@ -77,3 +77,10 @@ Reference: https://docs.github.com/en/pages/configuring-a-custom-domain-for-your
 
 Fonts: Manrope and Cormorant Garamond (SIL Open Font License — see `public/fonts/`).
 Globe land outline derived from Natural Earth (public domain).
+
+## DEVA — The Transformation (`/deva/`)
+
+- `src/sections/Deva.tsx` + `Deva.css` — the portfolio section (all styles scoped under `.deva`). `src/three/devaEmblem.ts` is the interactive steel "D" (lazy-loaded near the viewport; low-power, Save-Data, no-WebGL and reduced-motion visitors get the static poster emblem with CSS motion instead).
+- `deva/` — the DHANUSH → DEVA fitness tracker, a self-contained app (own `package.json`, esbuild). The Pages workflow builds it after the portfolio and copies it to `dist/deva`, so it is served at **https://kalladhanush.in/deva/**. It uses relative asset URLs and hash routing, so refresh and deep links never 404. See `deva/README.md`.
+- Google sign-in for `/deva/` needs an OAuth Client ID: set repo variable `GOOGLE_CLIENT_ID` (and optionally `ALLOWED_EMAIL`) under Settings → Secrets and variables → Actions → Variables, then re-run the deploy workflow — or paste it in the app's Settings page.
+- `.github/workflows/preview-build.yml` builds the `deva-transformation` branch to the `preview-build` branch for testing; it never touches the live site.

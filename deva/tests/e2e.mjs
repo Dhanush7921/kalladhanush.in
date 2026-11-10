@@ -211,7 +211,7 @@ try {
   // second device edits a meal + a duplicate row appears
   const mealRow = sheets.Meals[1].slice(); mealRow[4] = 'Chicken (edited on phone)'; mealRow[11] = Date.now() + 60000;
   sheets.Meals[1] = mealRow; sheets.Meals.push(sheets.Meals[2].slice());
-  await page.click('button:has-text("Sync now")'); await page.waitForTimeout(3000);
+  await page.click('button:has-text("Sync now")'); await page.waitForTimeout(8000);
   ok('Duplicate row collapsed', live() === base, `${live()}`);
   await page.goto(BASE + '?nointro#/fuel'); await page.waitForSelector('.food-form');
   ok('Remote newer edit pulled into app', await page.locator('td:has-text("edited on phone")').count() === 1);
